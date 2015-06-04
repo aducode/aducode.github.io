@@ -103,10 +103,10 @@ def clear():
 		os.remove(INDEX)
 
 
-def list(title=None, date=None):
+def list(name=None, date=None):
 	"""
 	list all the blogs
-	:param title: blog title
+	:param name: blog name
 	:param date:  blog created/modified date
 	:return
 	"""
@@ -120,82 +120,85 @@ def list(title=None, date=None):
 			if line and not line.startswith('#') and not line.startswith('-'):
 				token=line.split()
 				_id = int(token[0])
-				_title=token[1]
+				_name=token[1]
 				_date=token[2]
-				if title is not None:
-					if _title==title:
+				if name is not None:
+					if _name==name:
 						if date is not None:
 							if _date==date:
-								ret[_id]=(_title, _date)
+								ret[_id]=(_name, _date)
 						else:
-							ret[_id]=(_title, _date)
+							ret[_id]=(_name, _date)
 				else:
-					ret[_id]=(_title, _date)
+					ret[_id]=(_name, _date)
 	for k, v in ret.items():
 		print '%d\t%20s\t[%s]' % (k, v[0], v[1])
 	return ret if ret else None
 
 
-def create(title, date):
+def create(name, date, title):
 	"""
 	create a new blog
+	:param name: blog's name
 	:param title: blog's title
 	:param date:  created date
 	:return
 	"""
-	if not title:
-		print '[!] title is required\n\n'
+	if not name:
+		print '[!] name is required\n\n'
 		usage()
 	if not date:
 		date = datetime.datetime.now().strftime(DATE_FMT)
-	r = list(title, date)	
+	if not title:
+		title = name
+	r = list(name, date)	
 	if r is not None:
-		print '[!] create %s %s fail, it has exists\n\n' % (title, date)
+		print '[!] create %s %s fail, it has exists\n\n' % (name, date)
 		usage(False)
 	if not os.path.exists(os.path.join(MD_PATH, date)):
 		os.makedirs(os.path.join(MD_PATH, date))
-	with open(os.path.join(MD_PATH, date, '%s.md'%title), 'w') as post:
-		post.write('<!-- default -->')
+	with open(os.path.join(MD_PATH, date, '%s.md'%name), 'w') as post:
+		post.write('<!--{layout:default title:%s}-->' % title)
 		with open(INDEX, 'r+') as idfile:
 			idx=int(idfile.readline()[1:])
 			id_info=['#%d'%(idx+1),]
 			for line in idfile:
 				id_info.append(line.rstrip())
-			id_info.append('+%d %s %s' % (idx, title, date))
+			id_info.append('+%d %s %s' % (idx, name, date))
 			idfile.seek(0)
 			idfile.truncate(0)
 			idfile.write('\n'.join(id_info))
 
 
 	
-def remove(title, date):
+def remove(name, date):
 	"""
 	remove blog
-	:param title: blog's title
+	:param name: blog's name
 	:param date: blog created/modified date
 	:return
 	"""
-	if not title:
-		print '[!] title is required\n\n'
+	if not name:
+		print '[!] name is required\n\n'
 		usage()
-	ret = list(title, date)
+	ret = list(name, date)
 	if not ret:
-		print '[!] %s %s not exists\n\n'%(title, date)
+		print '[!] %s %s not exists\n\n'%(name, date)
 		usage(False)
 	_id = None
-	_title, _date = None, None
+	_name, _date = None, None
 	if len(ret)>1:
 		try:
 			_id = int(raw_input('input id:'))
-			_title, _date = ret[_id]
+			_name, _date = ret[_id]
 		except (ValueError, KeyError):
 			print '[!] invalid id\n\n'
 			usage()
 	else:
 		k, v = ret.items()[0]
 		_id = k
-		_title, _date = v
-	if raw_input('[?] continue to remove %s %s [Y/N]:'%(_title, _date)).upper()!='Y':
+		_name, _date = v
+	if raw_input('[?] continue to remove %s %s [Y/N]:'%(_name, _date)).upper()!='Y':
 		usage(False)
 	with open(INDEX,'r+') as idfile:
 		buf = []	
@@ -216,20 +219,24 @@ def build(force_build=False):
 	更新index.html目录
 	:param force_build: 是否强制重新转换markdown
 	"""
-	def mk2html(title, date):
+	def mk2html(name, date):
+		re_text='\s*<\s*!--\s*\{\s*layout:(.+)\s+title:(.+)\s*\}\s*-->'
 		if not os.path.exists(os.path.join(POST_PATH, date)):
 			os.makedirs(os.path.join(POST_PATH, date))
-		with open(os.path.join(MD_PATH, date, '%s.md'%title)) as md:
-			_layout = md.readline().replace('<!--','').replace('-->','').strip()
+		with open(os.path.join(MD_PATH, date, '%s.md'%name)) as md:
+			m = re.search(re_text, md.readline())
+			_layout = 'default'
+			_title = name
+			if m:
+				_layout=m.group(1)
+				_title = m.group(2)
 			if not os.path.exists(os.path.join(LAYOUT_PATH,'%s.layout'%_layout)):
 				print '[!] layout %s not exists' % _layout
-				return False
 			else:
 				with open(os.path.join(LAYOUT_PATH, '%s.layout'%_layout)) as _layout_file:
-					with open(os.path.join(POST_PATH, date, '%s.html'%title), 'w') as html:
-						html.write(_layout_file.read().format(content=markdown2.markdown(md.read()), title=title))
-						return True
-		return False
+					with open(os.path.join(POST_PATH, date, '%s.html'%name), 'w') as html:
+						html.write(_layout_file.read().format(content=markdown2.markdown(md.read()), title=_title))
+						return _title
 		
 	re_text='\s*<\s*!--\s*\{\s*contents-start\s*\}\s*-->\s*\n((.|\n)*)\s*<\s*!--\s*\{\s*contents-end\s*\}\s*-->'
 	with open(HOME,'r+') as home:
@@ -239,20 +246,22 @@ def build(force_build=False):
 			buf = []
 			for line in index_file:
 				if line and not line.startswith('#'):
-					_id, _title, _date = tuple(line[1:].split())
+					_id, _name, _date = tuple(line[1:].split())
 					if line.startswith('+'):							
-						if mk2html(_title, _date):
+						_title = mk2html(_name, _date)
+						if _title:
 							buf.append((' '+line[1:]).rstrip('\n'))
+							new_contents.append((_name, _title, _date))
 						else:
 							buf.append(line.rstrip('\n'))
-						new_contents.append((_title, _date))
 					elif line.startswith('-'):
 						buf.append(line.rstrip('\n'))
 					elif line.startswith(' '):
 						if force_build:
-							mk2html(_title, _date)
+							_title = mk2html(_name, _date)
+							if _title:
+								new_contents.append((_name, _title, _date))
 						buf.append(line.rstrip('\n'))
-						new_contents.append((_title, _date))
 				elif line.startswith('#'):
 					buf.append(line.rstrip('\n'))
 			index_file.seek(0)
@@ -269,7 +278,7 @@ def build(force_build=False):
 			home.write(before)
 			home.write('<!--{contents-start}-->\n')
 			home.write('<ul>\n')
-			home.write('\n'.join(['<li><a href="posts/{date}/{title}.html" target="_blank">{title} [{date}]</a></li>'.format(title=title, date=date) for title, date in new_contents]))
+			home.write('\n'.join(['<li><a href="posts/{date}/{name}.html" target="_blank">{title} [{date}]</a></li>'.format(name=name, title=title, date=date) for name, title, date in new_contents]))
 			home.write('\n</ul>\n')
 			home.write('<!--{contents-end}-->')
 			home.write(after)
@@ -287,9 +296,9 @@ def usage(display=True):
 		'',
 		'\tinit: init github pages',
 		'\tclear: clear generated files',
-		'\tcreate title [date]: create new blog',
-		'\tremove title [date]: remove exist blog',
-		'\tlist [title] [date]: list blog',
+		'\tcreate name [date]: create new blog',
+		'\tremove name [date]: remove exist blog',
+		'\tlist [name] [date]: list blog',
 		'\tbuild: markdown to html',
 	]
 	if display:
@@ -306,17 +315,28 @@ if __name__ == '__main__':
 			build(True)
 		else:
 			build()
-	elif len(sys.argv)>=2 and (sys.argv[1] != 'init' and sys.argv[1] != 'clear'):
+	elif len(sys.argv)>=2 and sys.argv[1] == 'create':
+		name = None
+		title = None
+		date = None
+		if len(sys.argv)>=3:
+			name = sys.argv[2].replace(' ', '_').replace('\t', '_')
+		if len(sys.argv)>=4:
+			date = ys.argv[3]
+		if len(sys.argv)>=5:
+			title = sys.argv[4]
+		create(name, date, title)
+	elif len(sys.argv)>=2 and (sys.argv[1] not in ('init', 'clear', 'build', 'create')):
 		action = sys.argv[1]
 		if action == '_check_env':
 			usage()
 		if not _check_env():
 			print '[!] need init first\n\n'
 			usage()
-		title = None
+		name = None
 		date = None
 		if len(sys.argv)>=3:
-			title = sys.argv[2]
+			name = sys.argv[2]
 		if len(sys.argv)>=4:
 			date = sys.argv[3]
 		try:
@@ -324,7 +344,7 @@ if __name__ == '__main__':
 		except (ValueError, TypeError) :
 			date = None
 		try:
-			globals()[action](title, date)
+			globals()[action](name, date)
 		except KeyError:
 			usage()
 	else:

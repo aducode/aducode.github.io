@@ -1,4 +1,4 @@
-<!--default-->
+<!--{layout:default title:计划}-->
 最近一段时间的项目计划
 
 * 需要一个markdown转html的工具(决定使用现有的[markdown2](https://github.com/trentm/python-markdown2),就不重复造轮子了)，然后实现一套工具组织github上的博客，写博客的工具就叫[poster](https://github.com/aducode/poster)吧
