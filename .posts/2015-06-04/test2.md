@@ -1,2 +1,1 @@
-<!-- default -->
-# TEST
+<!--{layout:default title:test2}-->

@@ -1,2 +1,1 @@
-<!-- default -->
-#This is a Demo Page
+<!--{layout:default title:test}-->
