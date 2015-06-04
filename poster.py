@@ -210,10 +210,11 @@ def remove(title, date):
 	
 	
 
-def build():
+def build(force_build=False):
 	"""
 	md生成html
 	更新index.html目录
+	:param force_build: 是否强制重新转换markdown
 	"""
 	def mk2html(title, date):
 		if not os.path.exists(os.path.join(POST_PATH, date)):
@@ -248,6 +249,8 @@ def build():
 					elif line.startswith('-'):
 						buf.append(line.rstrip('\n'))
 					elif line.startswith(' '):
+						if force_build:
+							mk2html(_title, _date)
 						buf.append(line.rstrip('\n'))
 						new_contents.append((_title, _date))
 				elif line.startswith('#'):
@@ -299,7 +302,10 @@ if __name__ == '__main__':
 	elif len(sys.argv)>=2 and sys.argv[1] == 'clear':
 		clear()
 	elif len(sys.argv)>=2 and sys.argv[1] == 'build':
-		build()
+		if len(sys.argv)>=3 and sys.argv[2]=='-f':
+			build(True)
+		else:
+			build()
 	elif len(sys.argv)>=2 and (sys.argv[1] != 'init' and sys.argv[1] != 'clear'):
 		action = sys.argv[1]
 		if action == '_check_env':
