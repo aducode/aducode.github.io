@@ -278,7 +278,7 @@ def build(force_build=True):
 			home.truncate(0)
 			home.write(before)
 			home.write('<ul>\n')
-			home.write('\n'.join(['<li><a href="posts/{date}/{name}.html" target="_blank">{title} [{date}]</a></li>'.format(name=name, title=title, date=date) for name, title, date in new_contents]))
+			home.write('\n'.join(['<li><a href="posts/{date}/{name}.html" target="_blank">{title} [{date}]</a></li>'.format(name=name, title=title, date=date) for name, title, date in new_contents[::-1]]))
 			home.write('\n</ul>\n')
 			home.write(after)
 
