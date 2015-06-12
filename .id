@@ -1,4 +1,4 @@
-#8
+#9
  0 HelloWorld 2015-05-29
  1 plan 2015-05-29
 -2 test 2015-06-04
@@ -7,3 +7,4 @@
 -5 test2 2015-06-04
 -6 test 2015-06-04
  7 simple-raft-py 2015-06-04
+ 8 begin_haskell 2015-06-12
