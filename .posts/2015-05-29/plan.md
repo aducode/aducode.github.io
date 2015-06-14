@@ -6,3 +6,4 @@
 * 学习编译原理，先从简单的正则引擎开始实践：[regularpy](https://github.com/aducode/regularpy)。如果顺利，希望完成一门新的编程语言，当然会很简单:)
 * [RAFT](https://github.com/aducode/simple-raft-py)算法初步实现完了，当然如果用在实战中是不可能了，时间允许会进行一些修补
 * 学习**haskell**和**erlang**
+* 多阅读一些好书，发现一个好网站[GitBook](https://www.gitbook.com/)
