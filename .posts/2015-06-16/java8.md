@@ -6,7 +6,7 @@
 * [http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html)
 
 学习java8中Stream的操作，自己做了一些测试代码如下：
-<pre><code>
+<pre  class="language-java line-numbers"><code>
 package test;
 
 import java.util.ArrayList;
@@ -139,7 +139,7 @@ public class NewFeature {
 ###从文件中获取Stream
 需要自己实现Spliterator接口，然后使用StreamSupport.stream(Spliterator spliterator, boolean pallel)方法
 
-<pre><code>
+<pre class="language-java line-numbers"><code>
 package test;
 
 import java.util.Spliterator;

@@ -1,7 +1,7 @@
 <!--{layout:default title:SpringMVC是如何查找方法的参数名的？}-->
 #SpringMVC是如何查找方法的参数名的？
 项目中用到SpringMVC，常见的用法像这样
-<pre>
+<pre class="language-java line-numbers">
 <code>
 @Controller  
 @RequestMapping("test")  
@@ -17,7 +17,7 @@ class Test{
 当GET http://localhost:8080/test/hello?name=aducode请求到服务端时， SpringMVC的 DispatcherServlet处理请求，并根据URL找到@RequestMapping对应的方法，然后根据
 @RequestParameter("name") 将url中的name值传递给方法调用
 但是Spring还支持默认参数名
-<pre>
+<pre class="language-java line-numbers">
 <code>
 @Controller  
 @RequestMapping("test")  
