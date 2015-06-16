@@ -38,140 +38,152 @@
 <strong>1. server</strong>：</p>
 
 <ul>
-<li>main loop所在，在main loop中处理IO事件和超时事件（参考redis的实现）
-<code>
-def server_forever(self):
-    """
-    启动服务
-    :return:
-    """
-    # init the server runtime env
-    self.initialise()
-    # Main Loop
-    while self.inputs:
-        # handle io
-        self.handle_io_event()
-        # handle timer
-        self.handle_timeout_event()
-        if not self.is_running():
-            # stoppde or stopping
-            break
-    # release the resources
-    self.realease()
-    print 'Server stopped!'
-</code></li>
-<li>网络模型采用IO多路复用模型，使用python的select模块</li>
-<li><p>将socket连接封装成channel，channel中进行输入输出数据格式化处理，同时多个channel组成链式结构，按顺序格式化数据
-```
-class Channel(object):
-def <strong>init</strong>(self, server, client, _next):
-    self.server = server
-    self.client = client
-    self.next = _next</p>
-
-<p>def input(self, data, recv):
-    """
-    :param data 数据
-    :param recv 是否从socket接受来的消息
-                当为False时，说明数据是发送到其他server的，不是server接受来的
-    """
-    pass</p>
-
-<p>def output(self):
-    pass</p>
-
-<p>def close(self):
-    """
-    说明socket被关闭，传递到handler
-    """
-    return self.next.close()
-```</p></li>
-<li><p>handler进行真正的逻辑处理，位于channel链的最末端
-```
-class Handler(object):
-def handle(self, server, client, request):
-    pass</p>
-
-<p>def close(self, server, client):
-    """
-    handler处理close
-    :return:
-    """
-    pass
-```</p></li>
-<li><p>server提供两个最基本的channel：1 IO2Channel 作为channel链的head，负责调用socket.recv接收数据和socket.send发送数据；2 Channel2Handler 作为channel链的tail与handler连接，负责调用handler.handle方法并将返回结果返回到前一个channel
-```
-class IO2Channel(Channel):
-"""
-直接与IO关联的Channel
-"""</p>
-
-<p>def <strong>init</strong>(self, server, client, _next):
-    super(IO2Channel, self).<strong>init</strong>(server, client, _next)</p>
-
-<p>def input(self, data=None, recv=True):
-    client<em>close = False
-    try:
-        if recv:
-            request = self.client.recv(1024)
-        else:
-            request = data
-    except Exception, e:
-        client</em>close = True
-    else:
-        if request:
-            self.next.input(request, recv)
-        else:
-            client<em>close = True
-    if client</em>close:
-        self.server.close(self.client)</p>
-
-<p>def output(self):
-    response, end = self.next.output()
-    if response:
-        try:
-            self.client.send(response)
-        except (IOError, socket.error):
-            self.server.close(self.client)
-    if (not response or end) and self.client in self.server.outputs:
-        self.server.outputs.remove(self.client)</p></li>
+<li>main loop所在，在main loop中处理IO事件和超时事件（参考redis的实现）</li>
 </ul>
 
-<p>class Channel2Handler(Channel):
-    """
-    与handler关联起来
-    """</p>
-
-<pre><code>def __init__(self, server, client, _next):
-    super(Channel2Handler, self).__init__(server, client, _next)
-    self.queue = Queue.Queue()
-
-def input(self, data, recv):
-    response = None
-    if recv:
-        if isinstance(self.next, Handler):
-            response = self.next.handle(self.server, self.client, data)
-        elif isinstance(self.next, types.FunctionType):
-            response = self.next(self.server, self.client, data)
-    else:
-        # 说明直接发出去
-        response = data
-    if response:
-        self.queue.put(response)
-        if self.client not in self.server.outputs:
-            self.server.outputs.append(self.client)
-
-def output(self):
-    try:
-        return self.queue.get_nowait(), self.queue.empty()
-    except Queue.Empty:
-        return None, True
-
-def close(self):
-    return self.next.close(self.server, self.client)
+<pre><code>
+def server_forever(self):
+        """
+        启动服务
+        :return:
+        """
+        # init the server runtime env
+        self.initialise()
+        # Main Loop
+        while self.inputs:
+            # handle io
+            self.handle_io_event()
+            # handle timer
+            self.handle_timeout_event()
+            if not self.is_running():
+                # stoppde or stopping
+                break
+        # release the resources
+        self.realease()
+        print 'Server stopped!'
 </code></pre>
 
-<p>```</p>
+<ul>
+<li>网络模型采用IO多路复用模型，使用python的select模块</li>
+<li>将socket连接封装成channel，channel中进行输入输出数据格式化处理，同时多个channel组成链式结构，按顺序格式化数据</li>
+</ul>
+
+<pre><code>
+class Channel(object):
+    def __init__(self, server, client, _next):
+        self.server = server
+        self.client = client
+        self.next = _next
+
+    def input(self, data, recv):
+        """
+        :param data 数据
+        :param recv 是否从socket接受来的消息
+                    当为False时，说明数据是发送到其他server的，不是server接受来的
+        """
+        pass
+
+    def output(self):
+        pass
+
+    def close(self):
+        """
+        说明socket被关闭，传递到handler
+        """
+        return self.next.close()
+</code></pre>
+
+<ul>
+<li>handler进行真正的逻辑处理，位于channel链的最末端</li>
+</ul>
+
+<pre><code>
+class Handler(object):
+    def handle(self, server, client, request):
+        pass
+
+    def close(self, server, client):
+        """
+        handler处理close
+        :return:
+        """
+        pass
+</code></pre>
+
+<ul>
+<li>server提供两个最基本的channel：1 IO2Channel 作为channel链的head，负责调用socket.recv接收数据和socket.send发送数据；2 Channel2Handler 作为channel链的tail与handler连接，负责调用handler.handle方法并将返回结果返回到前一个channel</li>
+</ul>
+
+<pre><code>
+class IO2Channel(Channel):
+    """
+    直接与IO关联的Channel
+    """
+
+    def __init__(self, server, client, _next):
+        super(IO2Channel, self).__init__(server, client, _next)
+
+    def input(self, data=None, recv=True):
+        client_close = False
+        try:
+            if recv:
+                request = self.client.recv(1024)
+            else:
+                request = data
+        except Exception, e:
+            client_close = True
+        else:
+            if request:
+                self.next.input(request, recv)
+            else:
+                client_close = True
+        if client_close:
+            self.server.close(self.client)
+
+    def output(self):
+        response, end = self.next.output()
+        if response:
+            try:
+                self.client.send(response)
+            except (IOError, socket.error):
+                self.server.close(self.client)
+        if (not response or end) and self.client in self.server.outputs:
+            self.server.outputs.remove(self.client)
+
+
+class Channel2Handler(Channel):
+    """
+    与handler关联起来
+    """
+
+    def __init__(self, server, client, _next):
+        super(Channel2Handler, self).__init__(server, client, _next)
+        self.queue = Queue.Queue()
+
+    def input(self, data, recv):
+        response = None
+        if recv:
+            if isinstance(self.next, Handler):
+                response = self.next.handle(self.server, self.client, data)
+            elif isinstance(self.next, types.FunctionType):
+                response = self.next(self.server, self.client, data)
+        else:
+            # 说明直接发出去
+            response = data
+        if response:
+            self.queue.put(response)
+            if self.client not in self.server.outputs:
+                self.server.outputs.append(self.client)
+
+    def output(self):
+        try:
+            return self.queue.get_nowait(), self.queue.empty()
+        except Queue.Empty:
+            return None, True
+
+    def close(self):
+        return self.next.close(self.server, self.client)
+</code></pre>
 
 <p><strong>2. protocol</strong></p>
 
@@ -196,103 +208,104 @@ def close(self):
 <li>node定义了一个逻辑上的节点，以(host, port)作为node的唯一标识</li>
 <li>node中实现了MessageChannel用来序列化/反序列化，将str格式的message转换成ClientMessage/NodeMessage</li>
 <li>node中实现了NodeHandler，用来路由不同类型的Message</li>
-<li><p>state用来定义节点状态，主要状态有Leader、Follower、Candidate
-```
-class State(object):
-"""
-节点状态类
-不同状态有不同的表现
-"""</p>
-
-<p>def <strong>init</strong>(self, node):
-    self.node = node</p>
-
-<p>def handle(self, client, message):
-    """
-    处理其他node的消息
-    """
-    assert isinstance(message, Message)
-    if isinstance(message, ClientMessage):
-        if message.op == 'get':
-            return self.on<em>get(client, message)
-        else:
-            return self.on</em>update(client, message)
-    elif isinstance(message, ClientCloseMessage):
-        return self.on<em>client</em>close(client, message)
-    elif isinstance(message, HeartbeatRequestMessage):
-        return self.on<em>heartbeat</em>request(client, message)
-    elif isinstance(message, HeartbeatResponseMessage):
-        return self.on<em>heartbeat</em>response(client, message)
-    elif isinstance(message, ElectRequestMessage):
-        return self.on<em>elect</em>request(client, message)
-    elif isinstance(message, ElectResponseMessage):
-        return self.on<em>elect</em>response(client, message)
-    elif isinstance(message, SyncRequestMessage):
-        return self.on<em>sync</em>request(client, message)
-    elif isinstance(message, SyncResponseMessage):
-        return self.on<em>sync</em>response(client, message)
-    else:
-        pass</p>
-
-<p>def on<em>get(self, client, message):
-    """
-    处理客户端get请求
-    """
-    return self.node.config.db.handle(client, message.op, message.key, message.value, message.auto</em>commit)</p>
-
-<p>def on_update(self, client, message):
-    """
-    处理客户端除了get外的请求
-    """
-    return '@%s:%d@redirect' % self.node.leader if self.node.leader \
-        else 'No Leader Elected, please wait until we have a leader...'</p>
-
-<p>def on<em>client</em>close(self, client, message):
-    """
-    处理客户端关闭
-    """
-    return self.node.config.db.release(message.client)</p>
-
-<p>def on<em>heartbeat</em>request(self, client, message):
-    """
-    接收到heartbeat请求的处理方法
-    """
-    pass</p>
-
-<p>def on<em>heartbeat</em>response(self, client, message):
-    """
-    接收到heartbeata响应的处理方法
-    """
-    pass</p>
-
-<p>def on<em>elect</em>request(self, client, message):
-    """
-    接收到选举请求的处理方法
-    """
-    pass</p>
-
-<p>def on<em>elect</em>response(self, client, message):
-    """
-    接收到选举响应的处理方法
-    """
-    pass</p>
-
-<p>def on<em>sync</em>request(self, client, message):
-    """
-    接收到同步请求
-    """
-    pass</p>
-
-<p>def on<em>sync</em>response(self, client, message):
-    """
-    接收同步响应
-    """
-    pass</p>
-
-<p>def <strong>str</strong>(self):
-    return self.<strong>class</strong>.<strong>name</strong>.strip().upper()
-```</p></li>
+<li>state用来定义节点状态，主要状态有Leader、Follower、Candidate</li>
 </ul>
+
+<pre><code>
+class State(object):
+    """
+    节点状态类
+    不同状态有不同的表现
+    """
+
+    def __init__(self, node):
+        self.node = node
+
+    def handle(self, client, message):
+        """
+        处理其他node的消息
+        """
+        assert isinstance(message, Message)
+        if isinstance(message, ClientMessage):
+            if message.op == 'get':
+                return self.on_get(client, message)
+            else:
+                return self.on_update(client, message)
+        elif isinstance(message, ClientCloseMessage):
+            return self.on_client_close(client, message)
+        elif isinstance(message, HeartbeatRequestMessage):
+            return self.on_heartbeat_request(client, message)
+        elif isinstance(message, HeartbeatResponseMessage):
+            return self.on_heartbeat_response(client, message)
+        elif isinstance(message, ElectRequestMessage):
+            return self.on_elect_request(client, message)
+        elif isinstance(message, ElectResponseMessage):
+            return self.on_elect_response(client, message)
+        elif isinstance(message, SyncRequestMessage):
+            return self.on_sync_request(client, message)
+        elif isinstance(message, SyncResponseMessage):
+            return self.on_sync_response(client, message)
+        else:
+            pass
+
+    def on_get(self, client, message):
+        """
+        处理客户端get请求
+        """
+        return self.node.config.db.handle(client, message.op, message.key, message.value, message.auto_commit)
+
+    def on_update(self, client, message):
+        """
+        处理客户端除了get外的请求
+        """
+        return '@%s:%d@redirect' % self.node.leader if self.node.leader \
+            else 'No Leader Elected, please wait until we have a leader...'
+
+    def on_client_close(self, client, message):
+        """
+        处理客户端关闭
+        """
+        return self.node.config.db.release(message.client)
+
+    def on_heartbeat_request(self, client, message):
+        """
+        接收到heartbeat请求的处理方法
+        """
+        pass
+
+    def on_heartbeat_response(self, client, message):
+        """
+        接收到heartbeata响应的处理方法
+        """
+        pass
+
+    def on_elect_request(self, client, message):
+        """
+        接收到选举请求的处理方法
+        """
+        pass
+
+    def on_elect_response(self, client, message):
+        """
+        接收到选举响应的处理方法
+        """
+        pass
+
+    def on_sync_request(self, client, message):
+        """
+        接收到同步请求
+        """
+        pass
+
+    def on_sync_response(self, client, message):
+        """
+        接收同步响应
+        """
+        pass
+
+    def __str__(self):
+        return self.__class__.__name__.strip().upper()
+</code></pre>
 
 <h3>目前实现的功能</h3>
 
