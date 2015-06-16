@@ -122,9 +122,6 @@ public class NewFeature {
         System.out.println("reduce res2 is:"+res2); //100 + 0+1+1+1+2+3+4+5+6+7+8+9
         String res3 = list.stream().reduce("result is:",(a,b)->a+"--"+b,(x,y)->x+","+y);
         System.out.println("reduce res3 is:"+res3); //result is:--0--1--1--1--2--3--4--5--6--7--8--9
-        //<U> U reduce(U identity,
-        //       BiFunction<U,? super T,U> accumulator,
-        //       BinaryOperator<U> combiner)
         //combiner 参数是在并行stream中生效，如下parallelStream
         //每个并行的stream初始值是"result is" 并且确定为String类型
         //每个并行的Stream会使用accumulator = (a,b)=>a+"--"+b  将两两元素变成Stream类型
