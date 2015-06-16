@@ -7,7 +7,7 @@
 **1. server**：
 
 * main loop所在，在main loop中处理IO事件和超时事件（参考redis的实现）
-<pre><code>
+```
 def server_forever(self):
         """
         启动服务
@@ -27,10 +27,10 @@ def server_forever(self):
         # release the resources
         self.realease()
         print 'Server stopped!'
-</code></pre>
+```
 *  网络模型采用IO多路复用模型，使用python的select模块
 *  将socket连接封装成channel，channel中进行输入输出数据格式化处理，同时多个channel组成链式结构，按顺序格式化数据
-<pre><code>
+```
 class Channel(object):
     def __init__(self, server, client, _next):
         self.server = server
@@ -53,9 +53,9 @@ class Channel(object):
         说明socket被关闭，传递到handler
         """
         return self.next.close()
-</code></pre>
+```
 *  handler进行真正的逻辑处理，位于channel链的最末端
-<pre><code>
+```
 class Handler(object):
     def handle(self, server, client, request):
         pass
@@ -66,9 +66,9 @@ class Handler(object):
         :return:
         """
         pass
-</code></pre>
+```
 *  server提供两个最基本的channel：1 IO2Channel 作为channel链的head，负责调用socket.recv接收数据和socket.send发送数据；2 Channel2Handler 作为channel链的tail与handler连接，负责调用handler.handle方法并将返回结果返回到前一个channel
-<pre><code>
+```
 class IO2Channel(Channel):
     """
     直接与IO关联的Channel
@@ -137,7 +137,7 @@ class Channel2Handler(Channel):
 
     def close(self):
         return self.next.close(self.server, self.client)
-</code></pre>
+```
 
 
 **2. protocol**
@@ -160,7 +160,7 @@ class Channel2Handler(Channel):
 * node中实现了MessageChannel用来序列化/反序列化，将str格式的message转换成ClientMessage/NodeMessage
 *  node中实现了NodeHandler，用来路由不同类型的Message
 * state用来定义节点状态，主要状态有Leader、Follower、Candidate
-<pre><code>
+```
 class State(object):
     """
     节点状态类
@@ -254,7 +254,7 @@ class State(object):
 
     def __str__(self):
         return self.__class__.__name__.strip().upper()
-</code></pre>
+```
 
 ### 目前实现的功能
 * 多节点选举Leader
