@@ -1,5 +1,4 @@
 <!--{layout:default title:Java8 Stream操作}-->
-#Java8 Stream操作
 参考：
 
 * [http://ifeve.com/stream/](http://ifeve.com/stream/)

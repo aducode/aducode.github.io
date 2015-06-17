@@ -1,5 +1,4 @@
 <!--{layout:default title:SpringMVC是如何查找方法的参数名的？}-->
-#SpringMVC是如何查找方法的参数名的？
 项目中用到SpringMVC，常见的用法像这样
 <pre class="language-java line-numbers">
 <code>
