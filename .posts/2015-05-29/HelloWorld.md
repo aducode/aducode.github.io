@@ -30,8 +30,6 @@ main = do
 <pre class="language-c line-numbers">
 <code>
 // c
-#include <stdio.h>
-
 int main(int argc, char ** argv) {
 	printf("hello world\n");
 }
