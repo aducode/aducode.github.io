@@ -3,3 +3,4 @@
 
 * [Haskell趣学指南](http://learnyoua.haskell.sg/) [GitHub](https://github.com/MnO2/learnyouahaskell-zh)
 * [用haskell实现scheme](http://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours)
+* [Warp : Haskell 的高性能 Web 服务器(译文)](http://veryr.com/posts/warp/)
