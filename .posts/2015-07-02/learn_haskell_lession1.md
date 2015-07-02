@@ -9,7 +9,8 @@ haskell的开发环境主要包括:
 
 * GHCi：交互式命令行
 * GHC： Haskell的编译器（将.hs源码编译成不同* * 平台下的可执行程序）
-* cabal： 模块管理工具，就像Java理的[Maven](http://maven.apache.org/), Python里的[pip](https://pypi.python.org/pypi)
+* cabal： 包管理工具&构建工具，就像Java理的[Maven](http://maven.apache.org/), Python里的[pip](https://pypi.python.org/pypi)
+* runhaskell: 解释引擎，可以将haskell作为脚本解释执行
 * 常用模块
 
 ##Hello World
