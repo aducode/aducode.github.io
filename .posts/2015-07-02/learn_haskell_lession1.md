@@ -39,6 +39,17 @@ ghc -o helloworld helloworld.hs
 单行注释: --
 
 多行注释 {- -}
+
+多行注释还可以声明一些GHCi扩展，比如：
+
+{-#LANGUAGE OverloadedStrings#-}
+
+{-#LANGUAGE QuasiQuotes#-}
+
+{-#LANGUAGE TemplateHaskell#-}
+
+{-#LANGUAGE TypeFamilies#-}
+
 ###类型
 Haskell是静态类型语言，但是有非常强大的类型推导，所以不需要向java或者C语言那样，必须写明声明变量的类型。
 Haskell 编译器可以自动推断出程序中几乎所有表达式的类型[注：有时候要提供一些信息，帮助编译器理解程序代码]。这个过程被称为类型推导（type inference）。

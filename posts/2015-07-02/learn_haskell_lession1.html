@@ -78,6 +78,16 @@ ghc -o helloworld helloworld.hs
 
 <p>多行注释 {- -}</p>
 
+<p>多行注释还可以声明一些GHCi扩展，比如：</p>
+
+<p>{-#LANGUAGE OverloadedStrings#-}</p>
+
+<p>{-#LANGUAGE QuasiQuotes#-}</p>
+
+<p>{-#LANGUAGE TemplateHaskell#-}</p>
+
+<p>{-#LANGUAGE TypeFamilies#-}</p>
+
 <h3>类型</h3>
 
 <p>Haskell是静态类型语言，但是有非常强大的类型推导，所以不需要向java或者C语言那样，必须写明声明变量的类型。
