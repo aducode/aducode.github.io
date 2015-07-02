@@ -9,7 +9,7 @@ haskell的开发环境主要包括:
 
 * GHCi：交互式命令行
 * GHC： Haskell的编译器（将.hs源码编译成不同* * 平台下的可执行程序）
-* cabal： 模块管理工具，就行Java理的[Maven](http://maven.apache.org/), Python里的[pip](https://pypi.python.org/pypi)
+* cabal： 模块管理工具，就像Java理的[Maven](http://maven.apache.org/), Python里的[pip](https://pypi.python.org/pypi)
 * 常用模块
 
 ##Hello World
@@ -44,11 +44,25 @@ Haskell 编译器可以自动推断出程序中几乎所有表达式的类型[�
 虽然 Haskell 允许我们显式地为任何值指定类型，但类型推导使得这种工作通常是可选的，而不是非做不可的事。。
 haskell中的基本类型主要有：
 
-* Char 单个 Unicode 字符。
-* Bool  表示一个布尔逻辑值。这个类型只有两个值： True 和 False 。
-* Int 带符号的定长（fixed-width）整数。这个值的准确范围由机器决定：在 32 位机器里， Int 为 32 位宽，在 64 位机器里， Int 为 64 位宽。Haskell 保证 Int 的宽度不少于 28 位。
-* Integer 不限长度的带符号整数。 Integer 并不像 Int 那么常用，因为它们需要更多的内存和更大的计算量。另一方面，对 Integer 的计算不会造成溢出，因此使用 Integer 的计算结果更可靠。
-* Double 用于表示浮点数。长度由机器决定，通常是 64 位。（Haskell 也有 Float 类型，但是并不推荐使用，因为编译器都是针对 Double 来进行优化的，而 Float 类型值的计算要慢得多。）
+* Char
+
+单个 Unicode 字符。
+
+* Bool 
+
+表示一个布尔逻辑值。这个类型只有两个值： True 和 False 。
+
+* Int
+
+带符号的定长（fixed-width）整数。这个值的准确范围由机器决定：在 32 位机器里， Int 为 32 位宽，在 64 位机器里， Int 为 64 位宽。Haskell 保证 Int 的宽度不少于 28 位。
+
+* Integer
+
+不限长度的带符号整数。 Integer 并不像 Int 那么常用，因为它们需要更多的内存和更大的计算量。另一方面，对 Integer 的计算不会造成溢出，因此使用 Integer 的计算结果更可靠。
+
+* Double
+
+用于表示浮点数。长度由机器决定，通常是 64 位。（Haskell 也有 Float 类型，但是并不推荐使用，因为编译器都是针对 Double 来进行优化的，而 Float 类型值的计算要慢得多。）
 
 ###函数
 ####函数声明
