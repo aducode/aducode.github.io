@@ -51,6 +51,7 @@ ghc -o helloworld helloworld.hs
 {-#LANGUAGE TypeFamilies#-}
 
 ###类型
+####基本类型
 Haskell是静态类型语言，但是有非常强大的类型推导，所以不需要向java或者C语言那样，必须写明声明变量的类型。
 Haskell 编译器可以自动推断出程序中几乎所有表达式的类型[注：有时候要提供一些信息，帮助编译器理解程序代码]。这个过程被称为类型推导（type inference）。
 虽然 Haskell 允许我们显式地为任何值指定类型，但类型推导使得这种工作通常是可选的，而不是非做不可的事。。
@@ -75,6 +76,59 @@ haskell中的基本类型主要有：
 * Double
 
 用于表示浮点数。长度由机器决定，通常是 64 位。（Haskell 也有 Float 类型，但是并不推荐使用，因为编译器都是针对 Double 来进行优化的，而 Float 类型值的计算要慢得多。）
+
+####列表
+列表容器要求内部的元素类型完全一致[Int] 表示Int列表类型 [Char]表示字符列表**也就是String类型**，其他类型的列表以此类推
+
+####自定义新的数据类型
+使用data关键字可以定义新的数据类型
+<pre class="language-haskell line-numbers">
+<code>
+data Person = Person
+</code>
+</pre>
+以上代码定义了一个Person类型的数据，然后这个类型中没有保存任何数据
+<pre class="language-haskell line-numbers">
+<code>
+data Person = Person String Int
+</code>
+</pre>
+这样定义Person类型，可以保存两种数据:String类型和Int类型
+**注意**:上面代码等号左边的Person是类型，右边Person叫做构造函数(constructor)，左右并不一定要名字一致，而且构造函数可以有多个，之间用"|"隔开
+<pre class="language-haskell line-numbers">
+<code>
+data Person = Student String Int | Teacher String Int Double
+</code>
+</pre>
+Person是类型,Student是一个构造函数(Student::String->Int->Person),Teacher也是一个构造函数(Teacher::String->Int->Double->Person)
+<pre class="language-haskell line-numbers">
+<code>
+let person1 = Student "XiaoMing" 12
+let person2 = Teacher "LaoZhang" 30  5000
+</code>
+</pre>
+这样person1和person2就都是Person类型数据了
+若要取Person类型中的名字，我们可以定义这样的函数
+<pre class="language-haskell line-numbers">
+<code>
+getName::Person->String
+getName (Student name _) = name
+getName (Teacher name _  _) = name
+
+getName (Teacher "LaoZhang" 30 5000)
+</code>
+</pre>
+为了自定义类型用起来方便，haskell还提供了另外一种构造函数(haskell的语法糖)
+<pre class="language-haskell line-numbers">
+<code>
+-- 注意字段之间的逗号
+data Person = Student{name::String,age::Int}|Teacher{name::String,age::Int,wage::Double}
+let person1 = Student{name="XiaoMing", age=12}
+let person2 = Teacher{name="LaoZhang", age=30, wage=5000}
+name person2
+</code>
+</pre>
+用这种构造函数，haskell会自动生成相应的取值函数，比如name::Person->String  age::Person->Int
 
 ###函数
 ####函数声明
