@@ -80,6 +80,17 @@ haskell中的基本类型主要有：
 ####列表
 列表容器要求内部的元素类型完全一致[Int] 表示Int列表类型 [Char]表示字符列表**也就是String类型**，其他类型的列表以此类推
 
+####类型别名
+haskell中可以用上C语言的typeof类似的功能，给现有的类型起个别名，比如：
+<pre class="language-haskell line-numbers">
+<code>
+type Age = Int
+type String = [Char]
+type IntList = [Int]
+</code>
+</pre>
+上面第二行，其实haskell内部已经帮我们做了
+
 ####自定义新的数据类型
 使用data关键字可以定义新的数据类型
 <pre class="language-haskell line-numbers">
@@ -131,6 +142,18 @@ name person2
 </pre>
 用这种构造函数，haskell会自动生成相应的取值函数，比如name::Person->String  age::Person->Int
 
+类型也可以带参数(不是构造函数带参数哦~)，就像这样：
+<pre class="language-haskell line-numbers">
+<code>
+data Entry a b = Entry{key::a,value::b}
+let p1 = Entry 1 "Foo"
+let p2 = Entry "Bar" 3.5
+let p3 = Entry{key="A",value="HHHH"}
+let p4 = Entry (1::Double)  2
+let p5 = Entry{key=1::Double, value=2}
+</code>
+</pre>
+上面的Entry中可以保存任何类型的a和b
 ###函数
 ####函数声明
 比如上面helloworld程序中:
