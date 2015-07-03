@@ -1,4 +1,4 @@
-<!--{layout:default title:haskell学习总结(一)}-->
+<!--{layout:default title:haskell学习总结(一)::初级篇}-->
 前段时间看完了[haskell趣学指南](http://learnyoua.haskell.sg/),了解了一些haskell的基本语法和函数式编程的皮毛。不过说实话，haskell的学习曲线确实比较陡，加上我大学学的数学理论基本都还给老师了，所以一些概念理解起来着实困难。
 
 俗话说好记性不如烂笔头，现在就将已经学到的haskell知识整理总结一下
