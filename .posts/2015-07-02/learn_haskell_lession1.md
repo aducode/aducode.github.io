@@ -122,7 +122,8 @@ getName (Teacher "LaoZhang" 30 5000)
 <pre class="language-haskell line-numbers">
 <code>
 -- 注意字段之间的逗号
-data Person = Student{name::String,age::Int}|Teacher{name::String,age::Int,wage::Double}
+data Person = Student{name::String,age::Int}
+			|Teacher{name::String,age::Int,wage::Double}
 let person1 = Student{name="XiaoMing", age=12}
 let person2 = Teacher{name="LaoZhang", age=30, wage=5000}
 name person2
