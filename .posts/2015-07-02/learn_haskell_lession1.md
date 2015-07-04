@@ -154,6 +154,10 @@ let p5 = Entry{key=1::Double, value=2}
 </code>
 </pre>
 上面的Entry中可以保存任何类型的a和b
+
+###类型类
+haskell中用data关键字可以像c语言中定义struct一样，同时也提供一种类似java**接口**的类型类，使用class关键字
+
 ###函数
 ####函数声明
 比如上面helloworld程序中:
