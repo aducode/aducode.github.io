@@ -157,7 +157,24 @@ let p5 = Entry{key=1::Double, value=2}
 
 ###类型类
 haskell中用data关键字可以像c语言中定义struct一样，同时也提供一种类似java**接口**的类型类，使用class关键字
+<pre class="language-haskell line-numbers">
+<code>
+--跟在class之后的Animal是这个类型类的名字，之后的a是这个类型类的实例类型(instance type)
+class Animal a where
+	eat::a->String->String
+data Pet = Cat | Dog
 
+--相当于java中Pet类实现Animal接口
+instance Animail Pet where
+	eat Cat food = "Cat eat " ++ food
+	eat Dog food = "Dog eat " ++ food
+
+let pet1 = Cat
+eat pet1 "fish"
+let pet2 = Dog
+eat pet2 "meat"
+</code>
+</pre>
 ###函数
 ####函数声明
 比如上面helloworld程序中:
