@@ -40,7 +40,7 @@ ghc -o helloworld helloworld.hs
 
 多行注释 {- -}
 
-多行注释还可以声明一些GHCi扩展，比如：
+多行注释还可以声明一些GHCi[扩展](https://wiki.haskell.org/Language_extensions)，比如：
 
 {-#LANGUAGE OverloadedStrings#-}
 
