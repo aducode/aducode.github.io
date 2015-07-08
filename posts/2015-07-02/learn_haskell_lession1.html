@@ -307,9 +307,42 @@ add x y = x + y
 </code>
 </pre>
 
-<p>对于上面add函数
-add 0 0的结果是 100
-add 0 1的结果是 1</p>
+<p>对于上面add函数</p>
+
+<p>add 0 0的结果是 100</p>
+
+<p>add 0 1的结果是 1</p>
+
+<p>这就叫函数的<strong>模式匹配(Pattern matching)</strong></p>
+
+<p>模式匹配一般也可以用<strong>Case expressions</strong>来实现：</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+add x y = case  x y of 
+            0 0 -> 100
+            otherwise -> x+y    
+</code>
+</pre>
+
+<p>再看如下代码</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+bmiTell :: (RealFloat a) => a -> String  
+bmiTell bmi  
+    | bmi <= 18.5 = "You're underweight, you emo, you!"  
+    | bmi <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"  
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"  
+    | otherwise   = "You're a whale, congratulations!"  
+</code>
+</pre>
+
+<p>这叫做<strong>Guard</strong></p>
+
+<blockquote>
+  <p>guard 由跟在函数名及参数后面的竖线标志，通常他们都是靠右一个缩进排成一列。一个 guard 就是一个布尔表达式，如果为真，就使用其对应的函数体。如果为假，就送去见下一个 guard，如之继续。如果我们用 24.3 呼叫这个函数，它就会先检查它是否小于等于 18.5，显然不是，于是见下一个 guard。24.3 小于 25.0，因此通过了第二个 guard 的检查，就返回第二个字串。</p>
+</blockquote>
 
       </section>
     </div>
