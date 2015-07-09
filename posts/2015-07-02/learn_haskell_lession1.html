@@ -344,6 +344,21 @@ bmiTell bmi
   <p>guard 由跟在函数名及参数后面的竖线标志，通常他们都是靠右一个缩进排成一列。一个 guard 就是一个布尔表达式，如果为真，就使用其对应的函数体。如果为假，就送去见下一个 guard，如之继续。如果我们用 24.3 呼叫这个函数，它就会先检查它是否小于等于 18.5，显然不是，于是见下一个 guard。24.3 小于 25.0，因此通过了第二个 guard 的检查，就返回第二个字串。</p>
 </blockquote>
 
+<h4>分支控制</h4>
+
+<p>上面的case of 与Guard可以看做其他语言的case，那么haskell有没有if呢？
+haskell中也有if，但是与java 或者c等其他面向对象、面向流程的语言来说，haskell的if else是表达式（expression不是statement），主要表现在else是不可以省略的。</p>
+
+<p>if的完整形式是: if ... then ... else ...</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+add x y = if x==0 && y==0
+            then 100
+            else  x + y
+</code>
+</pre>
+
       </section>
     </div>
 	<script src="../../javascripts/prism.js"></script>
