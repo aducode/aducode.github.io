@@ -1,5 +1,5 @@
 <!--{layout:default title:EL表达式支持Lambda}-->
-前些天有同事发现同样的EL表达式在tomcat和resin容器下某些行为稍有不同(具体什么语句不太记得了,类似${false=="FALSE"}这样的语句结果不同)，于是抱着好奇心想去探究一下EL表达式到底是什么，同时平时接触的都是tomcat容器，那么就拿[]tomcat的源码](http://apache.fayea.com/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.zip)来研究下好了。
+前些天有同事发现同样的EL表达式在tomcat和resin容器下某些行为稍有不同(具体什么语句不太记得了,类似${false=="FALSE"}这样的语句结果不同)，于是抱着好奇心想去探究一下EL表达式到底是什么，同时平时接触的都是tomcat容器，那么就拿[tomcat的源码](http://apache.fayea.com/tomcat/tomcat-7/v7.0.63/src/apache-tomcat-7.0.63-src.zip)来研究下好了。
 
 ###在eclipse中启动tomcat
 * **导入**:tomcat源码下有用于ant构建的build.xml,但是公司电脑上没装ant，就用了个最暴力的办法新建个eclipse项目，然后把源码目录下的java目录下的内容copy进新建的项目，同时为了项目运行正确，还需要把源码中的conf和webapps目录都copy到工程的根目录中。
