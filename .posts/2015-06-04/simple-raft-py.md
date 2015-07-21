@@ -27,7 +27,7 @@ def server_forever(self):
         self.realease()
         print 'Server stopped!'
 </code></pre>
-*  网络模型采用IO多路复用模型，使用python的select模块
+*  网络模型采用IO多路复用模型，使用python的select模块，水平触发level-triggered(也叫条件触发)
 *  将socket连接封装成channel，channel中进行输入输出数据格式化处理，同时多个channel组成链式结构，按顺序格式化数据
 <pre class="language-python line-numbers"><code>
 class Channel(object):
