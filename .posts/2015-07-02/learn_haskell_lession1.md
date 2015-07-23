@@ -155,6 +155,25 @@ let p5 = Entry{key=1::Double, value=2}
 </pre>
 上面的Entry中可以保存任何类型的a和b
 
+除了上面标准的data用法外，还可以使用[Generalised algebraic datatype(GADT)](https://wiki.haskell.org/GADT)
+<pre class="language-haskell line-numbers">
+<code>
+{-# LANGUAGE GADTs #-}
+data Person where
+	Student::String->Int->Person
+	Teacher::String->Int->Double->Person
+	
+
+data Entry a b where
+	--前面的Entry是构造函数名 后面的Entry是定义的new type名称
+	Entry::a->b->Entry 
+
+--使用GADTs还可以添加更多的类型限定
+data E a where
+	A::Eq b=>b->E b
+</code>
+</pre>
+
 ###类型类
 haskell中用data关键字可以像c语言中定义struct一样，同时也提供一种类似java**接口**的类型类，使用class关键字
 <pre class="language-haskell line-numbers">
@@ -175,6 +194,7 @@ let pet2 = Dog
 eat pet2 "meat"
 </code>
 </pre>
+
 ###函数
 ####函数声明
 比如上面helloworld程序中:
