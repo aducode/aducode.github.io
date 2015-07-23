@@ -95,6 +95,11 @@ type IntList = [Int]
 使用data关键字可以定义新的数据类型
 <pre class="language-haskell line-numbers">
 <code>
+-- 定义了一种新的类型Test
+-- 但是他没有构造函数，只能用作类型参数
+data Test
+
+--定义了一种新的类型Person，构造函数也是Person
 data Person = Person
 </code>
 </pre>
