@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
+
+    <title>Java tricky question </title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Java tricky question </h1>
+        <h2>Issac&#39;s Blog</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/aducode" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="Java tricky question " class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java tricky question </h3>
+		<p>原文：<a href="https://jaxenter.com/4-out-of-5-java-developers-failed-to-solve-this-question-119321.html?ref=dzone">4 out of 5 Java developers failed to solve this question</a></p>
+
+<h3>1. The toughest question of the Java deathmatch</h3>
+
+<p><img src="../../images/2015-08-06/question1.png" alt="img" />
+关于java泛型<a href="http://blog.csdn.net/caihaijiang/article/details/6403349">类型擦除</a>的问题。</p>
+
+<h3>2. toString(), or not toString(), that is the question</h3>
+
+<p><img src="../../images/2015-08-06/question2.png" alt="img" />
+类没有实现toString的小陷阱</p>
+
+<h3>3. Google Guava Sets</h3>
+
+<p><img src="../../images/2015-08-06/question3.png" alt="img" /></p>
+
+<h3>4. Double brace initialization, lol wut?!</h3>
+
+<p><img src="../../images/2015-08-06/question4.png" alt="img" />
+参考<a href="http://www.c2.com/cgi/wiki?DoubleBraceInitialization">Double Brace Initialization</a>，集合{{}}的形式相当于匿名内部类，NAMES.add的时候还没实例化完成。。</p>
+
+<p>正确的写法：</p>
+
+<pre class="language-java line-numbers">
+<code>
+private static final List<String> NAMES = new ArrayList<String>(){{
+    add("Hello");
+    this.add("World");
+    System.out.println(this); //这里用NAMES的话是null
+}};
+</code>
+</pre>
+
+<h3>5. The curious case of the map at runtime</h3>
+
+<p><img src="../../images/2015-08-06/question5.png" alt="img" /></p>
+
+<h3>Bonus: And the easiest question is…</h3>
+
+<p><img src="../../images/2015-08-06/question6.png" alt="img" /></p>
+
+      </section>
+    </div>
+	<script src="../../javascripts/prism.js"></script>
+  </body>
+</html>
+
