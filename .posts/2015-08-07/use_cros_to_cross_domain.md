@@ -85,3 +85,6 @@ if ( window.XDomainRequest ) { //判断是否存在XDomainRequest
 }
 </code>
 </pre>
+
+-----
+另附：[跨域的10中方法](http://www.csdn.net/article/2011-01-27/290968)
