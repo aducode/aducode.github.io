@@ -6,6 +6,7 @@
 * [《Real World Haskell》](http://book.realworldhaskell.org/)[(译版)](http://rwh.readthedocs.org/en/latest/)
 * [Warp : Haskell 的高性能 Web 服务器(译文)](http://veryr.com/posts/warp/)
 * [Yesod Web框架](http://www.yesodweb.com/)
+* [24 Days of GHC Extensions](https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html)
 
 
 Write Yourself a Scheme in 48 Hours源代码如下：
