@@ -193,10 +193,12 @@ getPerson = return $ Person "Duyang" 13
 
 main::IO ()
 main = do
-		person <- getPerson				-- 不使用扩展
+		-- 不使用扩展
+		person <- getPerson
 		putStrLn $ show $ name person
 		putStrLn $ show $ age person
-        person2@Person {..} <- getPerson		-- 使用扩展,其中person2代表匹配到的Person类型整体
+		-- 使用扩展,其中person2代表匹配到的Person类型整体
+        person2@Person {..} <- getPerson
         putStrLn $ show name
 		putStrLn $ show age
 		putStrLn $ show person2					
