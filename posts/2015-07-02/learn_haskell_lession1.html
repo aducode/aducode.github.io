@@ -249,6 +249,30 @@ data E a where
 </code>
 </pre>
 
+<p>Record Wildcards扩展，可以让代码更简洁</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+{-# LANGUAGE RecordWildCards    #-}
+data Person = Person{
+        name::String,
+        age::Int
+}deriving(Show)
+
+getPerson::IO Person
+getPerson = return $ Person "Duyang" 13
+
+main::IO ()
+main = do
+        person <- getPerson             -- 不使用扩展
+        putStrLn $ show $ name person
+        putStrLn $ show $ age person
+        Person {..} <- getPerson        -- 使用扩展
+        putStrLn $ show name
+        putStrLn $ show age
+</code>
+</pre>
+
 <h3>类型类</h3>
 
 <p>haskell中用data关键字可以像c语言中定义struct一样，同时也提供一种类似java<strong>接口</strong>的类型类，使用class关键字</p>
