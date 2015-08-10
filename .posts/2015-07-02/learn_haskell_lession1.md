@@ -196,9 +196,10 @@ main = do
 		person <- getPerson				-- 不使用扩展
 		putStrLn $ show $ name person
 		putStrLn $ show $ age person
-        Person {..} <- getPerson		-- 使用扩展
+        person2@Person {..} <- getPerson		-- 使用扩展,其中person2代表匹配到的Person类型整体
         putStrLn $ show name
 		putStrLn $ show age
+		putStrLn $ show person2					
 </code>
 </pre>
 
