@@ -60,6 +60,9 @@ Prelude>:set -XTypeFamilies
 </code>
 </pre>
 
+关于扩展的资料详见[24 Days of GHC Extensions](https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html)
+
+
 ###类型
 ####基本类型
 Haskell是静态类型语言，但是有非常强大的类型推导，所以不需要向java或者C语言那样，必须写明声明变量的类型。
