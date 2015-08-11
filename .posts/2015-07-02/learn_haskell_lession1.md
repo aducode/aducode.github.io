@@ -60,6 +60,16 @@ Prelude>:set -XTypeFamilies
 </code>
 </pre>
 
+或者在启动GHCi的时候加上-X
+
+<pre class="language-bash line-numbers">
+<code>
+ghci -XOverloadedStrings -X TemplateHaskell -ddump-splices
+# If you want to see the expansion of splices, 
+# use the flag -ddump-splices when starting GHCi
+</code>
+</pre>
+
 关于扩展的资料详见[24 Days of GHC Extensions](https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html)
 
 
