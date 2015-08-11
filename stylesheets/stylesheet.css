@@ -222,6 +222,16 @@ hr {
   background: url("../images/blacktocat.png") 0 0 no-repeat;
 }
 
+.btn-email .icon {
+	opacity: 0.6;
+	background: url("../images/email.png") 0 0 no-repeat;
+}
+
+.btn-star .icon {
+	opacity: 0.6;
+	background: url("../images/star.png") 0 0 no-repeat;
+}
+
 /* Links
    a, a:hover, a:visited
 */
