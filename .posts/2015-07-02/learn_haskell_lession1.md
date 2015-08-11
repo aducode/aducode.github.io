@@ -207,9 +207,12 @@ main = do
 
 ###类型类
 haskell中用data关键字可以像c语言中定义struct一样，同时也提供一种类似java**接口**的类型类，使用class关键字
+####一般情况
 <pre class="language-haskell line-numbers">
 <code>
 --跟在class之后的Animal是这个类型类的名字，之后的a是这个类型类的实例类型(instance type)
+-- 注意 默认情况下(无扩展)haskell的类型类必须有一个类型变量
+-- 也就是在Prelude中:k Animal结果必须是 Animal :: *->Constraint
 class Animal a where
 	eat::a->String->String
 data Pet = Cat | Dog
@@ -223,6 +226,67 @@ let pet1 = Cat
 eat pet1 "fish"
 let pet2 = Dog
 eat pet2 "meat"
+</code>
+</pre>
+
+####扩展:[Nullary Type Classes](https://ocharles.org.uk/blog/posts/2014-12-10-nullary-type-classes.html)
+
+<pre class="language-haskell line-numbers">
+<code>
+{-# LANGUAGE NullaryTypeClasses  #-}
+-- 使用上面这个扩展之后，没有类型变量的类型类变得合法了
+
+-- 这里的类型类是没有类型参数的
+-- :k Animal的结果是：Animal :: Constraint
+class Animal where
+	eat::String->String
+	
+-- 在需要的时候实现Animal
+instance Animal where
+	eat food = "eat " ++ food
+
+main::IO ()
+main = do
+	putStrLn $ eat "Apple"
+	-- It will display:  eat Apple
+</code>
+</pre>
+
+####扩展:[Multi-parameter Type Classes](https://ocharles.org.uk/blog/posts/2014-12-13-multi-param-type-classes.html)
+
+<pre class="language-haskell line-numbers">
+<code>
+{-# LANGUAGE MultiParamTypeClasses #-}
+-- 使用上面这个扩展之后，有多个类型变量的类型类变得合法了
+
+-- 类型类可以有多个类型变量（这里是3个）
+-- :k Animal的结果是 Animal :: * -> * -> * -> Constraint
+class Animal a b c where
+        act::a->b->c->String
+
+data Pet = Dog | Cat
+
+data Food = Meat | Fish
+
+data Action = Eat | Sleep
+
+instance Animal Pet Action Food where
+        act Dog Eat Meat = "Dog eat meat..."
+        act Cat Eat Fish = "Cat eat fish..."
+        act _ _ _ = "Invalidate!"
+
+main::IO ()
+main = do
+        putStrLn $ act Dog Eat Meat
+		-- Dog eat meat...
+        putStrLn $ act Cat Eat Fish
+		-- Cat eat fish...
+        putStrLn $ act Dog Eat Fish
+		-- Invalidate!
+        putStrLn $ act Cat Eat Meat
+		-- Invalidate!
+        putStrLn $ act Cat Sleep Fish
+		-- Invalidate!
 </code>
 </pre>
 
