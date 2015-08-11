@@ -50,6 +50,16 @@ ghc -o helloworld helloworld.hs
 
 {-#LANGUAGE TypeFamilies#-}
 
+在GHCI控制台情况下要使用扩展，可以使用:set命令:
+<pre class="language-bash line-numbers">
+<code>
+Prelude>:set -XOverloadedStrings
+Prelude>:set -XQuasiQuotes
+Prelude>:set -XTemplateHaskell
+Prelude>:set -XTypeFamilies
+</code>
+</pre>
+
 ###类型
 ####基本类型
 Haskell是静态类型语言，但是有非常强大的类型推导，所以不需要向java或者C语言那样，必须写明声明变量的类型。

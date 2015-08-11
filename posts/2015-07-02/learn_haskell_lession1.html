@@ -90,6 +90,17 @@ ghc -o helloworld helloworld.hs
 
 <p>{-#LANGUAGE TypeFamilies#-}</p>
 
+<p>在GHCI控制台情况下要使用扩展，可以使用:set命令:</p>
+
+<pre class="language-bash line-numbers">
+<code>
+Prelude>:set -XOverloadedStrings
+Prelude>:set -XQuasiQuotes
+Prelude>:set -XTemplateHaskell
+Prelude>:set -XTypeFamilies
+</code>
+</pre>
+
 <h3>类型</h3>
 
 <h4>基本类型</h4>
