@@ -402,3 +402,8 @@ add x y = if x==0 && y==0
 </code>
 </pre>
 ------------
+
+**haskell学习总结**
+
+* [haskell学习总结(一)::初级篇](../2015-07-02/learn_haskell_lession1.html)
+* [haskell学习总结(二)::元编程](../2015-08-12/learn_haskell_lession2.html)

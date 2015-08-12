@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
+
+    <title>haskell学习总结(二)::元编程</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>haskell学习总结(二)::元编程</h1>
+        <h2>Issac&#39;s Blog</h2>
+
+        <section id="downloads">
+		  <a href="http://aducode.github.io/" class="btn btn-star" target="_blank"><span class="icon"></span>Home Page</a>
+          <a href="https://github.com/aducode" class="btn btn-github" target="_blank"><span class="icon"></span>View on GitHub</a>
+		  <a href="mailto:aducode@126.com" class="btn btn-email"><span class="icon"></span>Send Email</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="haskell学习总结(二)::元编程" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>haskell学习总结(二)::元编程</h3>
+		<p>上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的<strong>元编程:</strong>TemplateHaskell<sup><a href="https://wiki.haskell.org/Template_Haskell">[1]</a></sup><sup><a href="http://hackage.haskell.org/package/template-haskell-2.9.0.0/docs/Language-Haskell-TH.html">[2]</a></sup><sup><a href="https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html">[3]</a></sup></p>
+
+<h3>引子</h3>
+
+<p>首先看一个使用TemplateHaskell扩展的经典例子，实现一个haskell中的<a href="https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html">printf函数</a>：</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+-- Main.hs
+{-# LANGUAGE TemplateHaskell #-}
+module Main where
+import PrintF (printf)
+
+main::IO ()
+main = do
+    -- :t printf
+    -- printf :: String -> Q Exp
+    putStrLn $ $(printf "hello,%s\nthe Answer to Life, the Universe and Everthing is %d") "Issac" 42
+    -- putStrLn ($(printf "hello,%s\nthe Answer to Life, the Universe and Everthing is %d") "Issac" 42)
+</code>
+</pre>
+
+<pre class="language-haskell line-numbers">
+<code>
+-- PrintF.hs
+{-# LANGUAGE TemplateHaskell #-} -- 这里要启用TemplateHaskell扩展
+module PrintF where
+
+-- NB: printf needs to be in a separate module to the one where
+-- you intend to use it.
+
+-- Import some Template Haskell syntax
+import Language.Haskell.TH
+
+-- Possible string tokens: %d %s and literal strings
+data Format = D | S | L String
+    deriving Show
+
+-- a poor man's tokenizer
+tokenize :: String -> [Format]
+tokenize [] = []
+tokenize ('%':c:rest) | c == 'd' = D : tokenize rest
+                      | c == 's' = S : tokenize rest
+tokenize (s:str) = L (s:p) : tokenize rest -- so we don't get stuck on weird '%'
+    where (p,rest) = span (/= '%') str
+
+-- generate argument list for the function
+args :: [Format] -> [PatQ]
+args fmt = concatMap (\(f,n) -> case f of
+                                  L _ -> []
+                                  _   -> [varP n]) $ zip fmt names
+    where names = [ mkName $ 'x' : show i | i <- [0..] ]
+
+-- generate body of the function
+body :: [Format] -> ExpQ
+body fmt = foldr (\ e e' -> infixApp e [| (++) |] e') (last exps) (init exps)
+    where exps = [ case f of
+                    L s -> stringE s
+                    D   -> appE [| show |] (varE n)
+                    S   -> varE n
+                 | (f,n) <- zip fmt names ]
+          names = [ mkName $ 'x' : show i | i <- [0..] ]
+
+-- glue the argument list and body together into a lambda
+-- this is what gets spliced into the haskell code at the call
+-- site of "printf"
+printf :: String -> Q Exp
+printf format = lamE (args fmt) (body fmt)
+    where fmt = tokenize format
+</code>
+</pre>
+
+<h3>未完待续</h3>
+
+<hr />
+
+<p><strong>haskell学习总结</strong></p>
+
+<ul>
+<li><a href="../2015-07-02/learn_haskell_lession1.html">haskell学习总结(一)::初级篇</a></li>
+<li><a href="../2015-08-12/learn_haskell_lession2.html">haskell学习总结(二)::元编程</a></li>
+</ul>
+
+      </section>
+    </div>
+	<script src="../../javascripts/prism.js"></script>
+  </body>
+</html>
+
