@@ -1,5 +1,5 @@
 <!--{layout:default title:haskell学习总结(二)::元编程}-->
-上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的**元编程:**TemplateHaskell<sup>[[1]](https://wiki.haskell.org/Template_Haskell)</sup><sup>[[2]](http://hackage.haskell.org/package/template-haskell-2.9.0.0/docs/Language-Haskell-TH.html)</sup><sup>[[3]](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)</sup>
+上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的**元编程:**TemplateHaskell<sup>[[1]](#reference1)</sup><sup>[[2]](#reference2)</sup><sup>[[3]](#reference3)</sup>
 ###引子
 首先看一个使用TemplateHaskell扩展的经典例子，实现一个haskell中的[printf函数](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)：
 
@@ -70,6 +70,16 @@ printf format = lamE (args fmt) (body fmt)
 </pre>
 
 ###未完待续
+
+------
+
+参考资料：
+
+<a name="reference1" id="reference"></a><a name="reference2" id="reference"></a><a name="reference3" id="reference"></a>
+
+1. [Template Haskell](https://wiki.haskell.org/Template_Haskell)
+2. [Language.Haskell.TH](http://hackage.haskell.org/package/template-haskell-2.9.0.0/docs/Language-Haskell-TH.html)
+3. [24 Days of GHC Extensions: Template Haskell](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)
 
 ------
 
