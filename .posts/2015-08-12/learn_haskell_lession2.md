@@ -73,7 +73,7 @@ printf format = lamE (args fmt) (body fmt)
 
 ------
 
-参考资料：
+**参考资料**
 
 <a name="reference1" id="reference"></a><a name="reference2" id="reference"></a><a name="reference3" id="reference"></a>
 
