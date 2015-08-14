@@ -97,6 +97,13 @@ body fmt = foldr (\ e e' -> infixApp e [| (++) |] e') (last exps) (init exps)
 -- this is what gets spliced into the haskell code at the call
 -- site of "printf"
 printf :: String -> Q Exp
+-- lamE::[PatQ] -> ExpQ -> ExpQ 
+-- 会生成一个lambda表达式 
+-- let myLambdaExp = lamE [varP $ mkName "x", varP $ mkName "y"] (infixApp (varE $ mkName "x") [|(+)|] (varE $ mkName "y"))
+-- let myLambda = $(myLambdaExp)
+-- 相当于生成
+-- \x y->x+y 的lambda表达式
+-- myLambda 1 2  -----> 结果为3
 printf format = lamE (args fmt) (body fmt)
     where fmt = tokenize format
 </code>
