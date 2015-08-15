@@ -76,6 +76,18 @@ printf format = lamE (args fmt) (body fmt)
 </code>
 </pre>
 
+###Haskell  AST
+TemplateHaskell扩展和Language.haskell.TH模块，主要用来生成AST（抽象语法树），然后再使用$() 对抽象语法树进行求值（或者说编译AST，生成Haskell可执行表达式或类型）
+
+AST中的主要构成元素有：
+
+####Expression
+可以在TemplateHaskell中用 Oxford brackets(牛津括号，什么鬼)括起来表示: [e|1+1|] or [|1+1|]
+
+####Pattern
+
+####Declaration
+
 ###未完待续
 
 ------
