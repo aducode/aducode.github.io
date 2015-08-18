@@ -411,12 +411,12 @@ Prelude是haskell语言的命令行交互界面，这里记录一些常用的操
 * Prelude启用扩展 :set -Xxxxx
 * it用法
 
-> (it is a special variable in ghci that allows us to reference the last computed value.
+> it is a special variable in ghci that allows us to reference the last computed value.
 
 
 ------------
 
 **haskell学习总结**
-
+* [开始学习Haskell](../2015-06-12/begin_haskell.html)
 * [haskell学习总结(一)::初级篇](../2015-07-02/learn_haskell_lession1.html)
 * [haskell学习总结(二)::元编程](../2015-08-12/learn_haskell_lession2.html)

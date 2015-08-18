@@ -254,3 +254,12 @@ parseExpr = parseAtom
 		return x
 </code>
 </pre>
+
+
+-------------------
+
+**haskell学习总结**
+
+* [开始学习Haskell](../2015-06-12/begin_haskell.html)
+* [haskell学习总结(一)::初级篇](../2015-07-02/learn_haskell_lession1.html)
+* [haskell学习总结(二)::元编程](../2015-08-12/learn_haskell_lession2.html)
