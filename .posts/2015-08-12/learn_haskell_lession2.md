@@ -82,11 +82,17 @@ TemplateHaskell扩展和Language.haskell.TH模块，主要用来生成AST（抽�
 AST中的主要构成元素有：
 
 ####Expression
+[|...|] or [e|...|] is an expression; the quotation has type Q Exp.
 可以在TemplateHaskell中用 Oxford brackets(牛津括号，什么鬼)括起来表示: [e|1+1|] or [|1+1|]
 
-####Pattern
-
 ####Declaration
+[d|...|]  "..." is a list of top-level declarations, the quotation has type Q [Dec]. 
+
+####Type
+[t|...|] "..." is a type, the quotation has type Q Type.
+
+####Pattern
+[p|...|] "..." is a pattern, the quotation has type Q Pat.
 
 ###未完待续
 
