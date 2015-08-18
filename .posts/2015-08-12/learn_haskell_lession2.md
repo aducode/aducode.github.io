@@ -104,7 +104,7 @@ AST中的主要构成元素有：
 <a name="reference1" id="reference"></a><a name="reference2" id="reference"></a><a name="reference3" id="reference"></a>
 
 1. [Template Haskell](https://wiki.haskell.org/Template_Haskell)
-2. [Language.Haskell.TH](http://hackage.haskell.org/package/template-haskell-2.9.0.0/docs/Language-Haskell-TH.html)
+2. [Language.Haskell.TH](http://hackage.haskell.org/package/template-haskell)
 3. [24 Days of GHC Extensions: Template Haskell](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)
 
 ------
