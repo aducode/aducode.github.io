@@ -1,5 +1,10 @@
 <!--{layout:default title:haskell学习总结(二)::元编程}-->
 上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的**元编程:**TemplateHaskell<sup>[[1]](#reference1)</sup><sup>[[2]](#reference2)</sup><sup>[[3]](#reference3)</sup>
+
+> The essence of Template Haskell is to write Haskell code that generates new Haskell code. To ensure that the generated code is well structured, we don't generate Haskell source code, but instead generate the abstract syntax trees directly. 
+
+> Template Haskell的本质是用haskell生成haskell代码。为了保证生成有结构的代码，不生成haskell源码，而是生成抽象语法树(AST)
+
 ###引子
 首先看一个使用TemplateHaskell扩展的经典例子，实现一个haskell中的[printf函数](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)：
 
@@ -79,10 +84,11 @@ printf format = lamE (args fmt) (body fmt)
 ###Haskell  AST
 TemplateHaskell扩展和Language.haskell.TH模块，主要用来生成AST（抽象语法树），然后再使用$() 对抽象语法树进行求值（或者说编译AST，生成Haskell可执行表达式或类型）
 
-AST中的主要构成元素有：
+AST中的主要构成元素有：Expression  Declaration Type Pattern
+这些元素可以方便的用Quotation表示出来：
 
 ####Expression
-> [|...|] or [e|...|] is an expression; the quotation has type Q Exp.
+> [|...|] or [e|...|] "..." is an expression; the quotation has type Q Exp.
 
 可以在TemplateHaskell中用 Oxford brackets(牛津括号，什么鬼)括起来表示: [e|1+1|] or [|1+1|]
 

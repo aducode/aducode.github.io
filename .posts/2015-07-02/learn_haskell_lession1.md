@@ -401,6 +401,19 @@ add x y = if x==0 && y==0
 			else  x + y
 </code>
 </pre>
+
+
+###Prelude tips
+
+Prelude是haskell语言的命令行交互界面，这里记录一些常用的操作吧：
+
+* 退出Prelude(第一次都不知道怎么退出T T) :q
+* Prelude启用扩展 :set -Xxxxx
+* it用法
+
+> (it is a special variable in ghci that allows us to reference the last computed value.
+
+
 ------------
 
 **haskell学习总结**
