@@ -426,7 +426,7 @@ final public void Params() throws ParseException {
 </code>
 </pre>
 
-还要定义一些常量标识"\" "/"符号和AstLambda AstInvoke节点类型（这部分代码就贴出来了）
+还要定义一些常量标识"\" "/"符号和AstLambda AstInvoke节点类型（这部分代码就不贴出来了）
 
 最终结果：
 
