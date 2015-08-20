@@ -76,30 +76,47 @@ printf :: String -> Q Exp
 -- 相当于生成
 -- \x y->x+y 的lambda表达式
 -- myLambda 1 2  -----> 结果为3
+-- myLambdaExp的另一种写法
+-- let myLambdaExp' = [|\x y->x+y|]
 printf format = lamE (args fmt) (body fmt)
     where fmt = tokenize format
 </code>
 </pre>
 
 ###Haskell  AST
+
+####Quotation
+
 TemplateHaskell扩展和Language.haskell.TH模块，主要用来生成AST（抽象语法树），然后再使用$() 对抽象语法树进行求值（或者说编译AST，生成Haskell可执行表达式或类型）
 
 AST中的主要构成元素有：Expression  Declaration Type Pattern
 这些元素可以方便的用Quotation表示出来：
 
-####Expression
+#####Expression
 > [|...|] or [e|...|] "..." is an expression; the quotation has type Q Exp.
 
+> Expression quotations are used for generating regular Haskell expressions, and the have the syntax [|expression|]. So for example [|1+2|] is syntactic sugar for the infix expression InfixE (Just (LitE (IntegerL 1))) (VarE GHC.Num.+) (Just (LitE (IntegerL 2))).
 可以在TemplateHaskell中用 Oxford brackets(牛津括号，什么鬼)括起来表示: [e|1+1|] or [|1+1|]
 
-####Declaration
+#####Declaration
 > [d|...|]  "..." is a list of top-level declarations, the quotation has type Q [Dec]. 
 
-####Type
+> Declaration quotations are used for generating top-level declarations for constants, types, functions, instances etc. and use the syntax [d|declaration|]. Example: [d|x = 5 ; y = 1|] results in [ValD (VarP x0) (NormalB (LitE (IntegerL 5))) [], ValD (VarP y0) (NormalB (LitE (IntegerL 1))) []]. Note that the quotation can contain multiple declarations, so it evaluates to a list of declaration values.
+
+#####Type
 > [t|...|] "..." is a type, the quotation has type Q Type.
 
-####Pattern
+> Type quotations are used for generating type values, such as [t|Int|]
+
+#####Pattern
 > [p|...|] "..." is a pattern, the quotation has type Q Pat.
+
+> Pattern quotations are used for generating patterns which are used, for example, in function declarations and case-expressions. [p|(x,y)|] generates the pattern TupP [VarP x,VarP y].
+
+####Quasi Quotation
+> quasi-quotation lets us build our own, custom quotations, but these are a more advanced topic that won't be covered in this post.
+
+Quotations用来生成Haskell AST非常方便，同时，我们也可以定义自己的Quotation，这时就需要用到quasi-quotation了
 
 ###未完待续
 
