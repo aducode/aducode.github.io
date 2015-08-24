@@ -402,6 +402,37 @@ add x y = if x==0 && y==0
 </code>
 </pre>
 
+####Lambda
+
+haskell中也支持lambda语法(可以认为是匿名函数啦)
+
+<pre class="language-haskell line-numbers">
+<code>
+-- 下面的语法定义了一个lambda表达式，
+-- 最终结果将是101
+(\x->x+1) 100
+
+-- 下面定义了一个接受两个参数的lambda表达式，
+-- 两个参数之间以空格分隔， 
+-- 最终结果是3
+(\x y->x+y) 1 2
+
+-- 接受两个参数的lambda的另外一种写法，
+-- 注意\x-> \y-> 之间的空格， 
+-- 最终结果是3
+(\x-> \y->x+y) 1 2
+
+
+-- lambda 的应用
+-- :t map
+-- map::(a->b)->[a]->[b]
+map (\x->x+100) [1..10]
+--结果是 [101,102,...110]
+</code>
+</pre>
+
+注意上面接受两个参数的第二种写法一定要注意空格，否则：
+![img](../../images/2015-07-02/syntax_error.jpg)
 
 ###Prelude tips
 
