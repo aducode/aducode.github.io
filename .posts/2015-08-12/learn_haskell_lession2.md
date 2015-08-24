@@ -1,5 +1,5 @@
 <!--{layout:default title:haskell学习总结(二)::元编程}-->
-上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的**元编程:**TemplateHaskell<sup>[[1]](#reference1)</sup><sup>[[2]](#reference2)</sup><sup>[[3]](#reference3)</sup>
+上一篇总结了一下haskell中的基本语法，这篇打算总结一下haskell中的**元编程:**TemplateHaskell<sup>[[1]](#reference1)</sup><sup>[[2]](#reference2)</sup><sup>[[3]](#reference3)</sup><sup>[[4]](#reference4)</sup>
 
 > The essence of Template Haskell is to write Haskell code that generates new Haskell code. To ensure that the generated code is well structured, we don't generate Haskell source code, but instead generate the abstract syntax trees directly. 
 
@@ -124,11 +124,12 @@ Quotations用来生成Haskell AST非常方便，同时，我们也可以定义�
 
 **参考资料**
 
-<a name="reference1" id="reference"></a><a name="reference2" id="reference"></a><a name="reference3" id="reference"></a>
+<a name="reference1" id="reference1"></a><a name="reference2" id="reference2"></a><a name="reference3" id="reference3"></a><a name="reference4" id="reference4"></a>
 
 1. [Template Haskell](https://wiki.haskell.org/Template_Haskell)
 2. [Language.Haskell.TH](http://hackage.haskell.org/package/template-haskell)
 3. [24 Days of GHC Extensions: Template Haskell](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html)
+4. [Template Meta-programming for Haskell[PDF]](http://research.microsoft.com/pubs/67015/meta-haskell.pdf)
 
 ------
 
