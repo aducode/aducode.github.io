@@ -118,6 +118,11 @@ AST中的主要构成元素有：Expression  Declaration Type Pattern
 
 Quotations用来生成Haskell AST非常方便，同时，我们也可以定义自己的Quotation，这时就需要用到quasi-quotation了
 
+
+####例子
+
+* [Template Haskell Tutorial](http://www.slideshare.net/kizzx2/template-haskell-tutorial?from_action=save)[[PDF]](../../attachments/2015-08-12/template-haskell-tutorial-110923213106-phpapp02.pdf)
+
 ###未完待续
 
 ------
