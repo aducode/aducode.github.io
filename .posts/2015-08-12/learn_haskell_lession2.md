@@ -83,6 +83,38 @@ printf format = lamE (args fmt) (body fmt)
 </code>
 </pre>
 
+注意事项：
+
+<pre class="language-haskell line-numbers">
+<code>
+{-# LANGUAGE TemplateHaskell #-}
+module FstN where
+import Language.Haskell.TH
+
+fstN::Int->ExpQ
+fstN n =let x=mkName "x" in
+        lamE [tupP (varP x: replicate (n-1) wildP)] (varE x)
+
+fstN'::Int->Q Exp
+fstN' n = do
+        x<-newName "x"
+        return $ LamE [TupP (VarP x: replicate (n-1) WildP)] (VarE x)
+
+-- 这样写是错误的
+-- main方法与fstN不能在同一个Module下面
+-- main::IO ()
+-- main = do
+--         print $ $(fstN 3) ("hello world", 1,2)
+</code>
+</pre>
+
+> An important restriction on Template Haskell to remember is when inside a splice you can only call functions defined in imported modules, not functions defined elsewhere in the same module. Quotations and splice have to be defined in separate modules, otherwise you’ll see this error:
+
+> GHC stage restriction:
+  `...' is used in a top-level splice or annotation,
+  and must be imported, not defined locally
+  
+
 ###Haskell  AST
 
 ####Quotation
