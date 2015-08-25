@@ -10,6 +10,8 @@
 * [24 Days of Hackage 2013](https://ocharles.org.uk/blog/pages/2013-12-01-24-days-of-hackage.html)
 * [24 Days of GHC Extensions](https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html)
 * [Haskell 98 Language and Libraries The Revised Report](https://www.haskell.org/onlinereport/index.html)
+* [Monad 最简介绍](http://zhuoqiang.me/what-is-monad.html)
+  [![alt monad](../../images/2015-06-12/monad.png)](http://zhuoqiang.me/what-is-monad.html)
 
 Write Yourself a Scheme in 48 Hours源代码如下：
 <pre class="language-haskell line-numbers">
