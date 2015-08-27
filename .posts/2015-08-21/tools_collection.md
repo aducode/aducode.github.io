@@ -31,3 +31,9 @@
 * [Github:Google-IPs](https://github.com/Playkid/Google-IPs)
 
 Google全球IP地址库
+
+###5. SAO Utils
+
+* [SAO Utils](http://www.gpbeta.com/post/develop/sao-utils/)
+
+能让你的windows桌面变成[《刀剑神域》](http://baike.baidu.com/link?url=WIE9MRV_x1KBNX0e5IxaFq0AI7_iKA34BHKrc96w4Iwkk64rbhZLsfssFWl7BInjcmIraKA-xGrXlbfx58E4iuVouTsv1tqGzw9NfAk4Iym), 适合我这个中二病宅男
