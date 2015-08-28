@@ -434,6 +434,103 @@ map (\x->x+100) [1..10]
 注意上面接受两个参数的第二种写法一定要注意空格，否则：
 ![img](../../images/2015-07-02/syntax_error.jpg)
 
+
+###模块(Module)
+
+Module是haskell源码的组织方式，可以将功能解耦到不同的Module中。
+
+Module可以是被组织成树形，与树形文件系统基本一致，让我们来看个具体例子：
+
+目录结构如下：
+
+<pre class="language-bash line-numbers">
+<code>
+`
+|-----Dict0                           #第一级目录
+|       |-----Dict1                  #第二级目录
+|       |       `-----Test0.hs        #Haskell源码文件Test0.hs
+|       `-----Test1.hs                #Haskell源码文件Test1.hs
+|------Test2.hs                       #Haskell源码文件Test2.hs
+`------Main.hs                        #Haskell入口所在源码文件Main.hs
+</code>
+</pre> 
+
+Test0.hs内容如下：
+
+<pre class="language-haskell line-numbers">
+<code>
+-- Test0.hs
+module Dict0.Dict1.Test0 where
+say::String
+say = "hello world"
+
+foo::Int
+foo = 42
+
+</code>
+</pre>
+
+Test1.hs内容如下:
+
+<pre class="language-haskell line-numbers">
+<code>
+-- Test1.hs
+module Dict0.Test1 where
+
+bar::String
+bar = "Bar!!!!"
+
+say::String 
+say = "hello world!In Test1"
+ 
+</code>
+</pre>
+
+Test2.hs内容如下:
+
+<pre class="language-haskell line-numbers">
+<code>
+-- Test2.hs
+module Test2(Tree(Leaf, TreeNode), Node(..), test) where
+-- Tree(Leaf, TreeNode) 表示Tree类型的Leaf TreeNode两个构造函数被export
+-- Node(..) 表示Node类型全部构造函数都被export
+data Node = MyInt Int|MyText String deriving(Show)
+
+data Tree = Leaf|TreeNode Node Tree Tree |PrivateLeaf deriving(Show)
+
+test::String
+test = "Hi this is TEST"
+
+-- test2相当于Test2模块的私有函数，不能被其他模块import
+test2::String
+test2 = "Hi this is TEST2"
+</code>
+</pre>
+
+Main.hs内容如下:
+
+<pre class="language-haskell line-numbers">
+<code>
+-- Main.hs
+-- import Dict0.Dict1.Test0 -- Dict0.Dict1.Test0中的say 和 foo都可用
+import Dict0.Dict1.Test0 (say)  -- Dict0.Dict1.Test0 中的foo将不可用
+-- import qualified Dict0.Test1  -- 不能直接使用Test1中的函数，需要写全
+import qualified Dict0.Test1 as T -- T作为Dict0.Test1的别名
+import Test2
+
+main::IO ()
+main = do
+    putStrLn say
+    -- putStrLn foo  --错误，作用域内没有foo函数
+    putStrLn T.say
+    putStrLn test
+    putStrLn $ show Leaf
+    putStrLn $ show $ TreeNode (MyInt 42) Leaf Leaf
+    -- putStrLn $ PrivateLeaf --错误，作用域内没有PrivateLeaf构造函数
+    -- putStrLn test2 -- 错误，作用域内没有test2
+</code>
+</pre>
+
 ###Prelude tips
 
 Prelude是haskell语言的命令行交互界面，这里记录一些常用的操作吧：
