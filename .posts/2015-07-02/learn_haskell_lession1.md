@@ -438,6 +438,21 @@ map (\x->x+100) [1..10]
 注意上面接受两个参数的第二种写法一定要注意空格，否则：
 ![img](../../images/2015-07-02/syntax_error.jpg)
 
+####列表推导式(List comprehension)
+
+python语言可以这样写：
+<pre class="language-python line-numbers">
+<code>
+[(x,y) for x in xrange(10) for y in xrange(10)]
+</code>
+</pre>
+
+haskell语言中语法如下:
+<pre class="language-haskell line-numbers">
+<code>
+[(x,y)|x<-[0..9], y<-[0..9]]
+</code>
+</pre>
 
 ###模块(Module)
 

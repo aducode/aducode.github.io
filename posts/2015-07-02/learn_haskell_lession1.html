@@ -537,6 +537,24 @@ map (\x->x+100) [1..10]
 <p>注意上面接受两个参数的第二种写法一定要注意空格，否则：
 <img src="../../images/2015-07-02/syntax_error.jpg" alt="img" /></p>
 
+<h4>列表推导式(List comprehension)</h4>
+
+<p>python语言可以这样写：</p>
+
+<pre class="language-python line-numbers">
+<code>
+[(x,y) for x in xrange(10) for y in xrange(10)]
+</code>
+</pre>
+
+<p>haskell语言中语法如下:</p>
+
+<pre class="language-haskell line-numbers">
+<code>
+[(x,y)|x<-[0..9], y<-[0..9]]
+</code>
+</pre>
+
 <h3>模块(Module)</h3>
 
 <p>Module是haskell源码的组织方式，可以将功能解耦到不同的Module中。</p>
