@@ -50,6 +50,10 @@ ghc -o helloworld helloworld.hs
 
 {-#LANGUAGE TypeFamilies#-}
 
+以下是另一种写法
+
+{-# OPTIONS_GHC -XTypeFamilies -XTemplateHaskell -XQuasiQuotes #-}
+
 在GHCI控制台情况下要使用扩展，可以使用:set命令:
 <pre class="language-bash line-numbers">
 <code>
