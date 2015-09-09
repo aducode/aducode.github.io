@@ -47,5 +47,5 @@ Google全球IP地址库
 
 1. 学习jvm字节码规范，了解class文件格式，手动修改，当然这个难度太大，并且不利于批量/实时操作；
 2. 使用Javassist，它支持java源码级别操作，即使一点也不了解字节码规范，也能轻松上手，缺点是速度比不上ASM（毕竟插入的是java源码，还需要经过编译阶段）；
-3. 使用ASM框架，支持字节码指令集级别的操作，使用起来比较麻烦，比如要Object [][]类型在ASM中要写成 [[Ljava/lang/Object, 但是速度比Javassist快，毕竟spring的AOP就用的是ASM；
+3. 使用ASM框架，支持字节码指令集级别的操作，使用起来比较麻烦，比如要Object [][]类型在ASM中要写成 [[Ljava/lang/Object, 但是速度比Javassist快，毕竟spring的AOP就用的是ASM的封装：cglib；
 
