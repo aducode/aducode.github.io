@@ -33,6 +33,8 @@ module PrintF where
 -- NB: printf needs to be in a separate module to the one where
 -- you intend to use it.
 
+-- Quotation相关的函数必须放在单独的一个文件内
+
 -- Import some Template Haskell syntax
 import Language.Haskell.TH
 
