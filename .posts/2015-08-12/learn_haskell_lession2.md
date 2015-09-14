@@ -153,9 +153,51 @@ AST中的主要构成元素有：Expression  Declaration Type Pattern
 Quotations用来生成Haskell AST非常方便，同时，我们也可以定义自己的Quotation，这时就需要用到quasi-quotation了
 
 
-####例子
+####使用QuasiQuote修改我们的PrintF
 
-* [Template Haskell Tutorial](http://www.slideshare.net/kizzx2/template-haskell-tutorial?from_action=save)[[PDF]](../../attachments/2015-08-12/template-haskell-tutorial-110923213106-phpapp02.pdf)
+<pre class="language-haskell line-numbers">
+<code>
+-- PrintF.hs
+{-# LANGUAGE TemplateHaskell #-}
+module PrintF where
+
+import Language.Haskell.TH
+import Language.Haskell.TH.Quote
+
+-- printf函数同上
+printf::String->Q Exp
+printf = ...
+
+-- QuasiQuoter
+
+pf = QuasiQuoter {
+		quoteExp = printf				-- 这里使用上面的printf函数
+		, quotePat = undefined			-- 其余的首先忽略
+		, quoteType = undefined
+		, quoteDec = undefined
+	}
+	
+-- Main.hs
+-- 下面是修改后的Main.hs
+
+{-# LANGUAGE TemplateHaskell #-}
+-- 要使用自定义的QuasiQuoter，那么必须加上下面的扩展
+{-# LANGUAGE QuasiQuotes 	 #-}
+module Main where
+import PrintF (pf)
+-- import Language.Haskell.TH.Quote
+
+main::IO ()
+main = do
+	-- 如要使用下面的方法，需要import Language.Haskell.TH.Quote
+	-- putStrLn $ $(quoteExp pf "hello,%s\nthe Answer to Life, the Universe and Everthing is %d") "Issac" 42
+	
+	-- [pf| |]之中的结果已经是一个lambda了，不要再用$()了
+	putStrLn $ [pf|hello,%s\nthe Answer to Life, the Universe and Everthing is %d|] "Issac" 42
+
+</code>
+</pre>
+
 
 ###未完待续
 
