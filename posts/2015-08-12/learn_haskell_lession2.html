@@ -204,6 +204,10 @@ fstN' n = do
 
 <h4>使用QuasiQuote修改我们的PrintF</h4>
 
+<ul>
+<li>QuasiQuoter之quoteExp</li>
+</ul>
+
 <pre class="language-haskell line-numbers">
 <code>
 -- PrintF.hs
@@ -243,6 +247,39 @@ main = do
 
     -- [pf| |]之中的结果已经是一个lambda了，不要再用$()了
     putStrLn $ [pf|hello,%s\nthe Answer to Life, the Universe and Everthing is %d|] "Issac" 42
+
+</code>
+</pre>
+
+<ul>
+<li>QuasiQuoter之quotePat</li>
+</ul>
+
+<pre class="language-haskell line-numbers">
+<code>
+--PrintF.hs
+
+genPat::String -> Q Pat
+--genPat str = return $ VarP $ mkName str
+genPat str = do
+    nm <- newName str
+    return $ VarP nm
+
+
+pf = QuasiQuoter {
+        quoteExp = printf               -- 这里使用上面的printf函数
+        , quotePat = genPat             -- 指定genPat函数       
+        , quoteType = undefined         -- 其余的首先忽略
+        , quoteDec = undefined
+    }
+
+-- Main.hs
+
+-- 这里使用的就是pf quasi-quoter的quotePat
+-- 相当于
+--  test x = x + 1
+-- 可见这个位置的[pf||]内容会被当成函数pattern使用
+test [pf|x|] = x + 1
 
 </code>
 </pre>

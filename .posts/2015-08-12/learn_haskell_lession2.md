@@ -155,6 +155,8 @@ Quotations用来生成Haskell AST非常方便，同时，我们也可以定义�
 
 ####使用QuasiQuote修改我们的PrintF
 
+* QuasiQuoter之quoteExp
+
 <pre class="language-haskell line-numbers">
 <code>
 -- PrintF.hs
@@ -198,6 +200,36 @@ main = do
 </code>
 </pre>
 
+* QuasiQuoter之quotePat
+
+<pre class="language-haskell line-numbers">
+<code>
+--PrintF.hs
+
+genPat::String -> Q Pat
+--genPat str = return $ VarP $ mkName str
+genPat str = do
+	nm <- newName str
+	return $ VarP nm
+
+
+pf = QuasiQuoter {
+		quoteExp = printf				-- 这里使用上面的printf函数
+		, quotePat = genPat				-- 指定genPat函数		
+		, quoteType = undefined			-- 其余的首先忽略
+		, quoteDec = undefined
+	}
+	
+-- Main.hs
+
+-- 这里使用的就是pf quasi-quoter的quotePat
+-- 相当于
+--	test x = x + 1
+-- 可见这个位置的[pf||]内容会被当成函数pattern使用
+test [pf|x|] = x + 1
+
+</code>
+</pre>
 
 ###未完待续
 
