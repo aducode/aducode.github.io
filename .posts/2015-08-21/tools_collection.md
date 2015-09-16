@@ -49,3 +49,8 @@ Google全球IP地址库
 2. 使用Javassist，它支持java源码级别操作，即使一点也不了解字节码规范，也能轻松上手，缺点是速度比不上ASM（毕竟插入的是java源码，还需要经过编译阶段）；
 3. 使用ASM框架，支持字节码指令集级别的操作，使用起来比较麻烦，比如要Object [][]类型在ASM中要写成 [[Ljava/lang/Object, 但是速度比Javassist快，毕竟spring的AOP就用的是ASM的封装：cglib；
 
+###7. 根据数据库table生成javabean的eclipse插件
+
+[参考资料:](http://blog.csdn.net/z1721940401/article/details/24836931)
+[点此下载](../../attachments/2015-09-16/JavaBeanTool_1.0.0.201112040957.rar)
+
