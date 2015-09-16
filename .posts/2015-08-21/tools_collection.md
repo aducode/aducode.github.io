@@ -51,6 +51,6 @@ Google全球IP地址库
 
 ###7. 根据数据库table生成javabean的eclipse插件
 
-[参考资料:](http://blog.csdn.net/z1721940401/article/details/24836931)
-[点此下载](../../attachments/2015-09-16/JavaBeanTool_1.0.0.201112040957.rar)
+* [参考资料](http://blog.csdn.net/z1721940401/article/details/24836931)
+* [点此下载](../../attachments/2015-09-16/JavaBeanTool_1.0.0.201112040957.rar)
 
