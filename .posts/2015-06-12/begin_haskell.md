@@ -1,6 +1,7 @@
 ﻿<!--{layout:default title:开始学习haskell}-->
 一直想学学习一下函数式编程语言 ，那么就从haskell入手好了，首先记录一些资料在这里:
 
+* [一个haskell的博客](http://blog.ezyang.com/)
 * [《Haskell趣学指南》](http://learnyoua.haskell.sg/) [GitHub](https://github.com/MnO2/learnyouahaskell-zh)
 * [用haskell实现scheme](http://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours)
 * [《Real World Haskell》](http://book.realworldhaskell.org/)[(译版)](http://rwh.readthedocs.org/en/latest/)
