@@ -568,3 +568,4 @@ Prelude是haskell语言的命令行交互界面，这里记录一些常用的操
 * [开始学习Haskell](../2015-06-12/begin_haskell.html)
 * [haskell学习总结(一)::初级篇](../2015-07-02/learn_haskell_lession1.html)
 * [haskell学习总结(二)::元编程](../2015-08-12/learn_haskell_lession2.html)
+* [haskell学习总结(三)::正则表达式](../2015-10-13/learn_haskell_lession3.html)
