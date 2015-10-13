@@ -555,6 +555,81 @@ map (\x->x+100) [1..10]
 </code>
 </pre>
 
+<h4>自定义操作符</h4>
+
+<p>定义一个运算符, 要说明它的结合性和优先级.</p>
+
+<blockquote>
+  <p>infixr 右结合</p>
+  
+  <p>infixl 左结合</p>
+  
+  <p>infix  不结合</p>
+</blockquote>
+
+<p>左右都可结合的运算符如 +, * 定义为左结合即可.</p>
+
+<p>优先级从0到9, 0最低, 9最高   </p>
+
+<p>已定义的运算符有:</p>
+
+<blockquote>
+  <p>level 9 . and !!</p>
+  
+  <p>level 8 ^</p>
+  
+  <p>level 7 *, /, &#96;div&#96;, &#96;rem&#96; and &#96;mod&#96;</p>
+  
+  <p>level 6 + and -</p>
+  
+  <p>level 5 :, ++ and \</p>
+  
+  <p>level 4 ==, /=,&lt;, &lt;=, &gt;, &gt;=, &#96;elem&#96; and &#96;notElem&#96;</p>
+  
+  <p>level 3 &amp;&amp;</p>
+  
+  <p>level 2 ||</p>
+  
+  <p>level 1 (not used in the prelude)</p>
+</blockquote>
+
+<p>举例:</p>
+
+<pre class="language-haskell line-numbers">
+<code>    
+   infixr 3  &&                       
+   (&&)  :: Bool -> Bool -> Bool
+   False && x   = False
+   True  && x   = x         
+
+   -- 先定义&&的结合性和优先级, 然后象定义函数一样定义它的功能.
+
+   -- 运算符用括号括起来, 可以当作函数使用, 比如:
+
+   map (3+) [1,2,3]
+
+   map (+3) [1,2,3]
+
+   -- 函数名用左引号`引起来, 也可以声明为运算符, 比如:
+
+   fac n = product [1..n]
+
+   infix 5 !^!, `choose`
+   (!^!), choose :: Int->Int->Int                   
+   n `choose` k = fac n `div` (fac k * fac (n-k))
+   n !^! k = fac n `div` (fac k * fac (n-k))     
+
+   -- 有了这些定义后,
+
+   choose 5 2
+   (!^!)  5 2
+   5   !^!  2
+   5 `choose` 2
+
+   -- 都给出答案10.  
+</code>
+</pre>
+
 <h3>模块(Module)</h3>
 
 <p>Module是haskell源码的组织方式，可以将功能解耦到不同的Module中。</p>
