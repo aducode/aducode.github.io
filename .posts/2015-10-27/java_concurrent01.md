@@ -313,6 +313,12 @@ public class SimpleLock implements Lock {
 
 -------
 
+参考资料：
+
+* [Java 并发工具包 java.util.concurrent 用户指南](http://blog.csdn.net/defonds/article/details/44021605)
+
+-------
+
 相关文章：
 
 * [很早之前总结的《Java线程同步互斥》](../2015-07-01/java_sync_mut.html)
