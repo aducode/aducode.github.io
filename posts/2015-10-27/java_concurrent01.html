@@ -464,7 +464,7 @@ public class CAS{
   <p>解决ABA问题方法就是给状态设置时间戳，这是并发中加乐观锁的常见做法，如果状态的时间戳发生了改变，证明已经不是原来的对象了，所以操作失败</p>
 </blockquote>
 
-<p>使用AtomicBoolean，我们可以基于CAS算法实现一个乐观锁：</p>
+<p>使用AtomicBoolean，我们可以基于CAS算法实现一个不可重入的乐观锁：</p>
 
 <pre class="language-java line-numbers">
 <code>
@@ -495,6 +495,34 @@ public class SimpleLock implements Lock {
         //从而获得锁
         status.set(false);
     }
+}
+</code>
+</pre>
+
+<pre class="language-java line-numbers">
+<code>
+import com.raven.lock.impl.SimpleLock;
+
+public class LockTest {
+    static final Lock lock = new SimpleLock();
+    static volatile int i = 0; 
+    public static void main(String[] args) {
+        for(int j=0;j<50;j++){
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    lock.lock();
+                    //注意SimpleLock是不可重入的锁
+                    //lock.lock(); //这里如果再获取锁，会死锁
+                    System.out.println("value:"+(i++));
+                    //lock.unlock();
+                    lock.unlock();
+                }
+            }).start();
+        }
+    }
+
 }
 </code>
 </pre>

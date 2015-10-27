@@ -421,7 +421,7 @@ public class CAS{
 
 
 
-使用AtomicBoolean，我们可以基于CAS算法实现一个乐观锁：
+使用AtomicBoolean，我们可以基于CAS算法实现一个不可重入的乐观锁：
 
 <pre class="language-java line-numbers">
 <code>
@@ -452,6 +452,34 @@ public class SimpleLock implements Lock {
 		//从而获得锁
 		status.set(false);
 	}
+}
+</code>
+</pre>
+
+<pre class="language-java line-numbers">
+<code>
+import com.raven.lock.impl.SimpleLock;
+
+public class LockTest {
+	static final Lock lock = new SimpleLock();
+	static volatile int i = 0; 
+	public static void main(String[] args) {
+		for(int j=0;j<50;j++){
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					lock.lock();
+					//注意SimpleLock是不可重入的锁
+					//lock.lock(); //这里如果再获取锁，会死锁
+					System.out.println("value:"+(i++));
+					//lock.unlock();
+					lock.unlock();
+				}
+			}).start();
+		}
+	}
+
 }
 </code>
 </pre>
