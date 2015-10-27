@@ -13,6 +13,7 @@
 * [Haskell 98 Language and Libraries The Revised Report](https://www.haskell.org/onlinereport/index.html)
 * [Monad 最简介绍](http://zhuoqiang.me/what-is-monad.html)
   [![alt monad](../../images/2015-06-12/monad.png)](http://zhuoqiang.me/what-is-monad.html)
+* [haskell/FFI(外部函数接口)](https://en.wikibooks.org/wiki/Haskell/FFI)
 
 Write Yourself a Scheme in 48 Hours源代码如下：
 <pre class="language-haskell line-numbers">
