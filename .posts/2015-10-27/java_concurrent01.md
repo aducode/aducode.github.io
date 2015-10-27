@@ -233,7 +233,7 @@ public class BQueue<T> {
 	public void add(T v) {
 		lock.lock();
 		try {
-			if (this.q.size() == this.cap) {
+			while(this.q.size() == this.cap) {
 				// full
 				this.full.await();
 			}
@@ -251,7 +251,7 @@ public class BQueue<T> {
 		T ret = null;
 		lock.lock();
 		try{
-			if(this.q.isEmpty()){
+			while(this.q.isEmpty()){
 				//empty
 				this.empty.await();
 			}
