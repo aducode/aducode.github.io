@@ -59,3 +59,7 @@ Google全球IP地址库
 * [c++11](http://www.tutorialspoint.com/compile_cpp11_online.php)
 * [java](http://www.tutorialspoint.com/compile_java_online.php)
 
+###9.搜索haskell函数
+
+* [hoogle](https://www.haskell.org/hoogle/)
+
