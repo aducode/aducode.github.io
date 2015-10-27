@@ -1,4 +1,4 @@
-<!--{layout:default title:Java Concurrent并发工具(一)}-->
+<!--{layout:default title:Java Concurrent(一)::互斥同步}-->
 
 最近打算好好看看java.util.concurrent里面的源码，正好总结一下常用的并发工具类，一级它们的用法和原理，记录在此。
 
@@ -322,3 +322,4 @@ public class SimpleLock implements Lock {
 相关文章：
 
 * [很早之前总结的《Java线程同步互斥》](../2015-07-01/java_sync_mut.html)
+* [Java Concurrent(二)::同步集合(敬请期待)](#)
