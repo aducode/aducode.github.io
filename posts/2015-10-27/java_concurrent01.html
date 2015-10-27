@@ -528,6 +528,48 @@ public class LockTest {
 </code>
 </pre>
 
+<p>要改成可重入乐观锁，也不是很难：</p>
+
+<pre class="language-java line-numbers">
+<code>
+public class SimpleLock implements Lock {
+    //记录当前线程
+    private Thread currentThread = null;
+    //锁的引用计数
+    private int reentrantNum = 0;
+    //冲突次数
+    private AtomicBoolean status = new AtomicBoolean(false);
+    @Override
+    public void lock() {
+        if(this.currentThread == Thread.currentThread()){
+                this.reentrantNum++;
+                //同一个线程重入了锁，直接返回
+                return;
+        }
+        //自旋
+        while(!status.compareAndSet(false, true)){}
+        //
+        this.currentThread = Thread.currentThread();
+    }
+
+    @Override
+    public void unlock() {
+        if(this.reentrantNum>0){
+            //重入过，释放的时候引用计数减一
+            this.reentrantNum--;
+            return;
+        }
+        if(this.reentrantNum==0){
+            //引用计数为0
+            this.currentThread = null;
+            //释放锁
+            status.set(false);
+        }
+    }
+}
+</code>
+</pre>
+
 <hr />
 
 <p>总结：</p>
