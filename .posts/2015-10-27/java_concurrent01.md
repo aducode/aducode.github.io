@@ -456,6 +456,7 @@ public class SimpleLock implements Lock {
 </code>
 </pre>
 
+**SimpleLock是不可重入的**
 <pre class="language-java line-numbers">
 <code>
 import com.raven.lock.impl.SimpleLock;
