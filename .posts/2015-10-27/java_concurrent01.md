@@ -479,7 +479,6 @@ public class LockTest {
 			}).start();
 		}
 	}
-
 }
 </code>
 </pre>
