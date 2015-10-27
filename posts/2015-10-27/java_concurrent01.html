@@ -225,6 +225,123 @@ public class Main{
 </code>
 </pre>
 
+<p>使用Condition我们可以自己实现一个有限阻塞队列（常用于生产者/消费者模式）:</p>
+
+<pre class="language-java line-numbers">
+<code>
+package com.raven.lock;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.Random;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+
+/**
+ * Blocking Queue
+ * 
+ * @author Raven
+ *
+ */
+public class BQueue<T> {
+    private static final BQueue<Integer> queue = new BQueue<>(10);
+    private Lock lock = null;
+    private Condition full = null;
+    private Condition empty = null;
+    private Queue<T> q;
+    private int cap;
+
+    public BQueue(int cap) {
+        this.cap = cap;
+        this.q = new ArrayDeque<>(cap);
+        this.lock = new ReentrantLock();
+        this.full = this.lock.newCondition();
+        this.empty = this.lock.newCondition();
+    }
+
+    public void add(T v) {
+        lock.lock();
+        try {
+            if (this.q.size() == this.cap) {
+                // full
+                this.full.await();
+            }
+            this.q.add(v);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            this.empty.signal();
+        }
+        lock.unlock();
+    }
+
+    public T remove() {
+        T ret = null;
+        lock.lock();
+        try{
+            if(this.q.isEmpty()){
+                //empty
+                this.empty.await();
+            }
+            ret = this.q.remove();
+        }catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            this.full.signal();
+        }
+        lock.unlock();
+        return ret;
+    }
+
+
+    public static void main(String [] args) throws InterruptedException{
+        //消费者
+        Thread producter = new Thread(new Runnable() {
+            private Random rand =new Random();
+            @Override
+            public void run() {
+                System.out.println("producter running...");
+                while(true){
+                    //生产
+                    int prd = rand.nextInt(1000);
+                    System.out.println("set:"+prd);
+                    queue.add(prd);
+                    prd = rand.nextInt(1000);
+                    System.out.println("set:"+prd);
+                    queue.add(prd);
+                }
+
+            }
+        });
+        //消费者
+        Thread customer = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("customer running...");
+                while(true){
+                    //消费
+                    int ret = queue.remove();
+                    System.out.println("get:"+ret);
+                }
+
+            }
+        });
+
+        producter.start();
+        customer.start();
+
+        producter.join();
+        customer.join();
+    }
+}
+
+</code>
+</pre>
+
 <h3>Java原子操作和Atomic系列类</h3>
 
 <blockquote>
@@ -302,6 +419,50 @@ public class Counter{
 </pre>
 
 <p>Atomic系列类中最重要的方法是boolean compareAndSet(except, update)方法，也就是java中实现Lock-Free的是CAS(比较与交换，Compare and Swap)算法；</p>
+
+<blockquote>
+  <p>我们先看下CAS操作。
+  CAS(Compare and Swap) 比较并交换操作是一个三元操作: 目标地址的值T(arget)，期望值E(xpected)，实际值R(eal)，</p>
+  
+  <ol>
+  <li>只有当目标值T == 期望值E时，才会把目标值T设置为实际值R，否则不改变目标值</li>
+  <li>不管目标值是否改变，都返回之前的目标值T
+  CAS类似如下操作</li>
+  </ol>
+</blockquote>
+
+<pre class="language-java line-numbers">
+<code>
+public class CAS{
+    private int value;
+    public synchronized int get(){
+        return value;
+    }
+    public synchronized int compareAndSwap(int expected, int real){
+        int oldValue = this.value;
+        if(this.value == expected){
+            this.value = real;
+        }
+        return oldValue;
+    }
+
+    public synchronized boolean compareAndSet(int expected, int real){
+        return (expected == compareAndSet(expected, real));
+    }
+}
+</code>
+</pre>
+
+<blockquote>
+  <p>CAS只比较期望值和目标值是否相当，相当就设置新值。那么ABA问题就来了：</p>
+  
+  <ol>
+  <li>由于CAS只是值比较，比如目标是A, 期望值也是A, 那么CAS操作会成功。但是这时候目标A可能不是原来的那个A了，它可能是A变成了B，再变成了A。所以叫ABA问题，很形象。ABA问题可能会使程序出错，比如限时有界队列锁中的节点有几个状态，虽然引用值是A，但是可能对象的状态已经变了，这时候的A实际已经不是原来的A了</li>
+  <li>需要注意的是<strong>ABA问题不是说CAS操作的过程中A变成了ABA，CAS操作是原子操作，不会被打断</strong>。</li>
+  </ol>
+  
+  <p>解决ABA问题方法就是给状态设置时间戳，这是并发中加乐观锁的常见做法，如果状态的时间戳发生了改变，证明已经不是原来的对象了，所以操作失败</p>
+</blockquote>
 
 <p>使用AtomicBoolean，我们可以基于CAS算法实现一个乐观锁：</p>
 
