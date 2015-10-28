@@ -38,7 +38,7 @@ java信号量（**Semaphore**）类似不止允许一个人进入的锁，可以
 
 相关文章：
 
-* [Java Concurrent(一)](../2015-10-27/java_concurrent01.html)
-
+* [Java Concurrent(一)::互斥同步](../2015-10-27/java_concurrent01.html)
+* [Java Concurrent(二)::并发集合](../2015-10-28/java_concurrent02.html)
 
 

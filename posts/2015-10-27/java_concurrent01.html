@@ -48,8 +48,41 @@ public interface Lock{
     void lock();
     /**
      * 释放锁
+     * 对应于lock()、tryLock()、tryLock(xx)、lockInterruptibly()等操作
      */
     void unlock();
+
+    /**
+     * 类似lock
+     * 但是会优先响应中断
+     * 即被其他线程中断的线程会获得锁，处理中断异常
+     */
+    void lockInterruptibly() throws InterruptedException;
+
+    /**
+     * 非阻塞
+     * 仅在调用时锁为空闲状态才获取该锁
+     * 如果锁可用，则获取锁，并立即返回值  true
+     * 如果锁不可用，则此方法将立即返回值  false
+     */
+    boolean tryLock();
+
+    /**
+     * 如果锁在给定的等待时间内空闲，并且当前线程未被中断，则获取锁
+     * 如果锁可用，则此方法将立即返回值  true
+     * 如果锁不可用，出于线程调度目的，将禁用当前线程，
+     * 并且在发生以下三种情况之一前，该线程将一直处于休眠状态：
+     *   1. 锁由当前线程获得；或者
+     *   2. 其他某个线程中断当前线程，并且支持对锁获取的中断；或者
+     *   3. 已超过指定的等待时间
+     * 如果获得了锁，则返回值  true 
+     * 如果当前线程：
+     *   1. 在进入此方法时已经设置了该线程的中断状态；或者
+     *   2. 在获取锁时被中断，并且支持对锁获取的中断
+     * 则将抛出  InterruptedException ，并会清除当前线程的已中断状态
+     * 如果超过了指定的等待时间，则将返回值  false 。如果 time 小于等于 0，该方法将完全不等待
+     */
+    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
 }
 </code>
 </pre>
@@ -86,6 +119,26 @@ public class LockTest {
 <p>正确的使用锁了，可以保证上面多个线程按照正确的顺序输出变量i的值</p>
 
 <p>具体锁的实现原理，这里暂时不分析，准备以后单独写一篇文章详细说明</p>
+
+<h4>锁的公平性</h4>
+
+<p>在创建锁时，我们可以指定锁的公平性</p>
+
+<pre class="language-java line-numbers">
+<code>
+//默认非公平锁
+Lock lock = new ReentrantLock();
+
+//显示指定公平锁
+Lock lock = new ReentrantLock(true);
+//显示指定非公平锁
+Lock lock = new ReentrantLock(false);
+</code>
+</pre>
+
+<blockquote>
+  <p>如果在绝对时间上，先对锁进行获取的请求一定被先满足，那么这个锁是公平的，反之，是不公平的</p>
+</blockquote>
 
 <h3>java.util.concurrent.locks.Condition</h3>
 
@@ -595,7 +648,7 @@ public class SimpleLock implements Lock {
 
 <ul>
 <li><a href="../2015-07-01/java_sync_mut.html">很早之前总结的《Java线程同步互斥》</a></li>
-<li><a href="#">Java Concurrent(二)::同步集合(敬请期待)</a></li>
+<li><a href="../2015-10-28/java_concurrent02.html">Java Concurrent(二)::并发集合</a></li>
 </ul>
 
       </section>
