@@ -337,6 +337,165 @@ public E poll() {
 
 只有在修改add/remove操作时，才需要加锁，可以做到并发free-lock读，适用于读多写少的场景，并且数据量不宜过大，否则copy锁组时间过长。
 
+###ConcurrentMap
+
+ConcurrentMap继承自Map接口，同时主要提供了putIfAbsent方法:
+
+<pre class="language-java line-numbers">
+<code>
+public interface ConcurrentMap<K, V> extends Map<K, V> {
+  V putIfAbsent(K key, V value);
+}</code>
+</pre>
+
+putIfAbsent方法与put方法的区别就是：
+
+putIfAbsent(k, v)如果k存在，v不覆盖map中的值
+
+put(k, v) 如果k存在，则v覆盖map中的值
+
+>If the specified key is not already associated
+>with a value, associate it with the given value.
+>This is equivalent to
+
+><pre class="language-java line-numbers">
+<code>
+{
+	if (!map.containsKey(key))
+		return map.put(key, value);
+	else
+		return map.get(key);
+}</code>
+</pre>
+
+>**except that the action is performed atomically.**
+
+####ConcurrentHashMap
+
+ConcurrentMap最常用的实现类就是ConcurrentHashMap了，对于同样是线程安全的Hashtable，不同点是：
+
+1. Hashtable是接口Map的实现类，没有putIfAbsend方法；
+2. Hashtable使用synchronized关键字，锁住整个Map，锁的力度比较大。
+
+下面让我们来看看ConcurrentHashMap是如何保证线程安全的
+
+* get方法
+
+<pre class="language-java line-numbers">
+<code>
+public V get(Object key) {
+    Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
+    int h = spread(key.hashCode());
+    if ((tab = table) != null && (n = tab.length) > 0 &&
+        (e = tabAt(tab, (n - 1) & h)) != null) {
+        if ((eh = e.hash) == h) {
+            if ((ek = e.key) == key || (ek != null && key.equals(ek)))
+                return e.val;
+        }
+        else if (eh < 0) //表示是一个被回收的solt
+            return (p = e.find(h, key)) != null ? p.val : null;
+        while ((e = e.next) != null) {
+            if (e.hash == h &&
+                ((ek = e.key) == key || (ek != null && key.equals(ek))))
+                return e.val;
+        }
+    }
+    return null;
+}</code>
+</pre>
+
+* put/putIfAbsent方法
+
+<pre class="language-java line-numbers">
+<code>
+public V put(K key, V value) {
+    return putVal(key, value, false);
+}
+
+public V putIfAbsent(K key, V value) {
+    return putVal(key, value, true);
+}
+
+final V putVal(K key, V value, boolean onlyIfAbsent) {
+    if (key == null || value == null) throw new NullPointerException();
+    int hash = spread(key.hashCode());
+    int binCount = 0;
+    for (Node<K,V>[] tab = table;;) {
+        Node<K,V> f; int n, i, fh;
+        if (tab == null || (n = tab.length) == 0)
+            tab = initTable();
+        else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
+            if (casTabAt(tab, i, null,
+                         new Node<K,V>(hash, key, value, null)))
+                break;                   // no lock when adding to empty bin
+        }
+        else if ((fh = f.hash) == MOVED)
+            tab = helpTransfer(tab, f);
+        else {
+            V oldVal = null;
+            synchronized (f) {
+                if (tabAt(tab, i) == f) {
+                    if (fh >= 0) {
+                        binCount = 1;
+                        for (Node<K,V> e = f;; ++binCount) {
+                            K ek;
+                            if (e.hash == hash &&
+                                ((ek = e.key) == key ||
+                                 (ek != null && key.equals(ek)))) {
+                                oldVal = e.val;
+                                if (!onlyIfAbsent)
+                                    e.val = value;
+                                break;
+                            }
+                            Node<K,V> pred = e;
+                            if ((e = e.next) == null) {
+                                pred.next = new Node<K,V>(hash, key, value, null);
+                                break;
+                            }
+                        }
+                    }
+                    else if (f instanceof TreeBin) {
+                        Node<K,V> p;
+                        binCount = 2;
+                        if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key, value)) != null) {
+                            oldVal = p.val;
+                            if (!onlyIfAbsent)
+                                p.val = value;
+                        }
+                    }
+                }
+            }
+            if (binCount != 0) {
+                if (binCount >= TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);
+                if (oldVal != null)
+                    return oldVal;
+                break;
+            }
+        }
+    }
+    addCount(1L, binCount);
+    return null;
+}</code>
+</pre>
+
+上面代码line14 casTabAt采用乐观锁添加新Node，冲突则循环重试
+
+line22 只锁住单个Node，减少锁的粒度，提高并发性能
+
+-------
+
+总结：
+
+通过看JDK Concurrent集合源码，发现考虑多线程的情况下，一个简单的集合操作逻辑也会变的非常复杂，因此自己在项目中一定要好好设计，争取做到：
+
+0. 能用单线程就别用多线程；
+1. 多用JDK里封装好的并发工具，自己代码逻辑尽量在单线程中；
+1. 使用final不变量，没有变量，线程之间就可以不考虑锁；
+2. 尽量多使用局部变量；由于局部变量存在栈上，每个线程独享自己的栈空间，而堆上的对象则是jvm共享；
+3. 状态变化尽量保持在一个线程中，多个线程都能改变共享变量的状态会比较麻烦；
+4. 锁的粒度尽可能小；
+
 -------
 
 参考资料：
@@ -346,5 +505,5 @@ public E poll() {
 -------
 相关文章：
 
-* [很早之前总结的《Java线程同步互斥》](../2015-07-01/java_sync_mut.html)
-* [Java Concurrent(一)::互斥同步](../2015-10-27/java_concurrent01.html)
+* 上一篇:[Java Concurrent(一)::互斥同步](../2015-10-27/java_concurrent01.html)
+* 下一篇:[Java Concurrent(三)::Lock详解(敬请期待)](#)

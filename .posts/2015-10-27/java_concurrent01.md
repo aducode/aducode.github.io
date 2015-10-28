@@ -101,7 +101,7 @@ Lock lock = new ReentrantLock();
 
 //显示指定公平锁
 Lock lock = new ReentrantLock(true);
-//显示指定非公平锁
+//显示指定非公平
 Lock lock = new ReentrantLock(false);
 </code>
 </pre>
@@ -594,5 +594,5 @@ public class SimpleLock implements Lock {
 
 相关文章：
 
-* [很早之前总结的《Java线程同步互斥》](../2015-07-01/java_sync_mut.html)
-* [Java Concurrent(二)::并发集合](../2015-10-28/java_concurrent02.html)
+* 上一篇:[很早之前总结的《Java线程同步互斥》](../2015-07-01/java_sync_mut.html)
+* 下一篇:[Java Concurrent(二)::并发集合](../2015-10-28/java_concurrent02.html)
