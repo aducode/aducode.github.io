@@ -8,6 +8,8 @@
 
 在Java1.5之前，多线程同步控制是靠synchronized关键字来实现同步方法/同步代码块；在1.5之后，我们可以使用java.util.concurrent.locks.Lock接口以及多个实现类来进行线程同步了。
 
+**注意:** 此系列文章内源码为java version 1.8.0_60
+
 <pre class="language-java line-numbers">
 <code>
 //Lock接口部分代码

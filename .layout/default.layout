@@ -32,6 +32,10 @@
 <a id="{title}" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>{title}</h3>
 		{content}
       </section>
+	  <section style="font-size:13px;color:gray;">
+	  <div style="float:left">联系作者:<a href="mailto:aducode@126">aducode@126.com</a></div>
+	  <div style="float:right">更多精彩文章请点击:<a href="http://aducode.github.io">http://aducode.github.io</a></div>
+	  </section>
     </div>
 	<script src="../../javascripts/prism.js"></script>
   </body>
