@@ -49,6 +49,8 @@ NonFairSync--/</code>
 
 <p>FairSync/NonFairSync分别实现公平锁/非公平锁，它们的父类都是抽象类</p>
 
+<p>ReadWriteRenntrantLock也类似！</p>
+
 <h4>AbstractOwnableSynchronizer</h4>
 
 <p>我们先从最祖先的类看起，AbstractOwnableSynchronizer类里面只维护了一个拥有锁的线程对象</p>
@@ -239,9 +241,108 @@ final boolean acquireQueued(final Node node, int arg) {
 
 <p>通过上面这段代码，我们可以看出，在冲突低时，使用自选锁，冲突高时，使用阻塞锁</p>
 
+<h4>Sync</h4>
+
+<p>最复杂的AbstractQueuedSynchronizer之后，就是Sync及FairSync/NonFairSync类了，这些类主要是对AbstractQueuedSynchronizer做了进一步的封装，最终暴露出acquire/release方法，供ReentrantLock的lock/unlock使用，这里就不详细说明了。</p>
+
 <hr />
 
-<p>未完待续</p>
+<h3>Unsafe park unpark</h3>
+
+<p>sun.msic.Unsafe类是Sun JDK/Openjdk里面负责直接操作底层数据的类，java中的Atomic内的一些列原子操作都是由Unsafe的compareAndSwap来完成的；上面AbstractQueuedSynchronizer内的park/unpark挂起/唤醒线程也是由Unsafe.park/unpark完成的。</p>
+
+<p>park/unpark不像wait/notify那样，必须在synchronized的Object上进行等待/唤醒，spark可以直接挂起当前线程，unpark(thread)则可以直接唤醒当前线程。</p>
+
+<p>可以说Lock就是由更细粒度的操作：Unsafe的CAS和park/unpark封装而来。</p>
+
+<p>下面就是使用Unsafe.park/unpark的测试代码：</p>
+
+<pre class="language-java line-numbers">
+<code>
+package test;
+
+import java.lang.reflect.Field;
+import java.util.Random;
+
+import sun.misc.Unsafe;
+
+public class Test {
+    private static  Unsafe _UNSAFE;
+    private static Random rand = new Random();
+    static {
+        try {
+            //由于Java安全机制的限制，非BootClassLoader加载的类均不能实例化Unsafe对象
+            //所以必须通过反射来获取theUnsafe，进而获取Unsafe类对象
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            _UNSAFE = (Unsafe)f.get(null);
+        } catch (NoSuchFieldException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    private static final Unsafe UNSAFE = _UNSAFE;
+    private static final Thread t1 = new Thread(new Runnable(){
+        private int count = 0;
+        @Override
+        public void run() {
+            while(true){
+                System.out.println("Thread1 running ... "+(this.count++));
+                //唤醒t2线程
+                UNSAFE.unpark(t2);
+                try {
+                    Thread.sleep(rand.nextInt(1000));
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }   
+        }
+    });
+
+    private static final Thread t2 = new Thread(new Runnable(){
+        private int count = 0;
+        @Override
+        public void run() {
+            while(true){
+                //阻塞自身线程，等待unpark
+                UNSAFE.park(false, 0L);
+                System.out.println("Thread2 running ... "+(this.count++));
+                try {
+                    Thread.sleep(rand.nextInt(1000));
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }   
+        }
+    });
+    public static void main(String[] args) throws InterruptedException {
+        // TODO Auto-generated method stub
+        System.out.println("hello world");
+
+//      t1.setDaemon(true);
+//      t2.setDaemon(true);
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+    }
+
+}
+</code>
+</pre>
 
 <hr />
 
