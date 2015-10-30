@@ -506,4 +506,4 @@ line22 只锁住单个Node，减少锁的粒度，提高并发性能
 相关文章：
 
 * 上一篇:[Java Concurrent(一)::互斥同步](../2015-10-27/java_concurrent01.html)
-* 下一篇:[Java Concurrent(三)::Lock详解(敬请期待)](#)
+* 下一篇:[Java Concurrent(三)::Lock详解](../2015-10-30/java_concurrent03.html)
