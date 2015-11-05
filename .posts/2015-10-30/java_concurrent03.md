@@ -321,4 +321,4 @@ public class Test {
 -------
 相关文章：
 
-* 上一篇:[Java Concurrent(二)::并发集合](../2015-10-27/java_concurrent01.html)
+* 上一篇:[Java Concurrent(二)::并发集合](../2015-10-27/java_concurrent02.html)
