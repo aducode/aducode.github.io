@@ -63,3 +63,6 @@ Google全球IP地址库
 
 * [hoogle](https://www.haskell.org/hoogle/)
 
+###10.Java正则表达式教程:
+
+* [java正则表达式教程](http://www.java3z.com/cwbwebhome/article/article8/Regex/Java.Regex.Tutorial.html)
