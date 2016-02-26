@@ -66,3 +66,8 @@ Google全球IP地址库
 ###10.Java正则表达式教程:
 
 * [java正则表达式教程](http://www.java3z.com/cwbwebhome/article/article8/Regex/Java.Regex.Tutorial.html)
+
+###11.python机器学习库sklearn
+
+* [scikit-learn](http://scikit-learn.org/stable/)
+
