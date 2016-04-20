@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
+	<script src="../../javascripts/statistics.js"></script>
+    <title>redis_on_stress_testing</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>redis_on_stress_testing</h1>
+        <h2>Raven&#39;s Blog</h2>
+
+        <section id="downloads">
+		  <a href="http://aducode.github.io/" class="btn btn-star" target="_blank"><span class="icon"></span>Home Page</a>
+          <a href="https://github.com/aducode" class="btn btn-github" target="_blank"><span class="icon"></span>View on GitHub</a>
+		  <a href="mailto:aducode@126.com" class="btn btn-email"><span class="icon"></span>Send Email</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="redis_on_stress_testing" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>redis_on_stress_testing</h3>
+		<p>好久没写blog了，今天有时间稍微记录下在项目压测中遇到的坑</p>
+
+<p>项目依赖redis，发现并发上来后，redis的耗时会非常严重（只是简单的get set操作，加上java序列化，耗时最长能到3秒），经同事点拨，可能是redis配置的后台持久化功能引发的性能瓶颈，马上修改配置关掉相关配置项，从新压测性能得到显著的提高。</p>
+
+<p>redis默认只是用RDB的方式持久化，策略配置是：</p>
+
+<blockquote>
+  <ol>
+  <li>save 900 1         #900秒内有1次key更改</li>
+  <li>save 300 10        #300秒内有10次key更改</li>
+  <li>save 60 10000      #60秒内有10000次key更改</li>
+  </ol>
+</blockquote>
+
+<p>压测情况下，一分钟很容易到达1W次的key更改，每次持久化都要fork子进程，dump内存中的数据，如果一分钟内没有dump完，下一分钟又fork了进程dump，进而导致性能下降</p>
+
+      </section>
+	  <section style="font-size:13px;color:gray;">
+	  <div style="float:left">联系作者:<a href="mailto:aducode@126">aducode@126.com</a></div>
+	  <div style="float:right">更多精彩文章请点击:<a href="http://aducode.github.io">http://aducode.github.io</a></div>
+	  </section>
+    </div>
+	<script src="../../javascripts/prism.js"></script>
+  </body>
+</html>
+
