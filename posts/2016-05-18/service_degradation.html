@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
+	<script src="../../javascripts/statistics.js"></script>
+    <title>service_degradation</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>service_degradation</h1>
+        <h2>Raven&#39;s Blog</h2>
+
+        <section id="downloads">
+		  <a href="http://aducode.github.io/" class="btn btn-star" target="_blank"><span class="icon"></span>Home Page</a>
+          <a href="https://github.com/aducode" class="btn btn-github" target="_blank"><span class="icon"></span>View on GitHub</a>
+		  <a href="mailto:aducode@126.com" class="btn btn-email"><span class="icon"></span>Send Email</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="service_degradation" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>service_degradation</h3>
+		<h1>服务降级</h1>
+
+<p>在公司负责APP首页的后端服务，因为是首页，如果服务稍微出现一点问题就有领导来找我，近一周内已经找我3次了（虽然不全是因为我的服务有问题导致的，大部分情况下是我依赖的下游服务的问题）。为了首页接口的问题，感觉是时候加入一些服务监控和自动降级的功能了，现记录一下大概的方案设计。</p>
+
+<h3>目标</h3>
+
+<ol>
+<li>通用</li>
+<li>代码侵入性小</li>
+<li>与服务主逻辑隔离</li>
+</ol>
+
+<h3>粒度</h3>
+
+<ol>
+<li>服务级别， sop服务层面， 粒度粗，与逻辑耦合低</li>
+<li>方法级别， 自己代码逻辑层面，粒度细，与逻辑耦合高</li>
+</ol>
+
+<h3>系统构成</h3>
+
+<ol>
+<li>开关
+控制程序逻辑是否被调用，可以手动修改，或者自动降级
+开关状态
+（1） 程序内部的静态变量，对外暴露服务接口修改/外部系统通知变更
+（2） Redis/db存储，保存全局状态，分布式环境保证数据一致性，轮询</li>
+<li>采样，收集需要监控的方法的执行时间，异常等信息
+（1） 基于日志的采样，需要统一被监控方法日志格式
+（2） 程序逻辑内采样</li>
+<li>自动降级开关触发策略
+一定时间内异常超过阈值，程序平均耗时超过阈值等，通知服务开关/修改全局开关位</li>
+<li>自动升级
+开关关闭时，保留少量请求继续采样，当样本达到要求打开开关</li>
+</ol>
+
+      </section>
+	  <section style="font-size:13px;color:gray;">
+	  <div style="float:left">联系作者:<a href="mailto:aducode@126">aducode@126.com</a></div>
+	  <div style="float:right">更多精彩文章请点击:<a href="http://aducode.github.io">http://aducode.github.io</a></div>
+	  </section>
+    </div>
+	<script src="../../javascripts/prism.js"></script>
+  </body>
+</html>
+
