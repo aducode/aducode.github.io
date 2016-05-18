@@ -1,4 +1,4 @@
-<!--{layout:default title:redis_on_stress_testing}-->
+<!--{layout:default title:压力测试中redis的坑}-->
 好久没写blog了，今天有时间稍微记录下在项目压测中遇到的坑
 
 项目依赖redis，发现并发上来后，redis的耗时会非常严重（只是简单的get set操作，加上java序列化，耗时最长能到3秒），经同事点拨，可能是redis配置的后台持久化功能引发的性能瓶颈，马上修改配置关掉相关配置项，从新压测性能得到显著的提高。

@@ -8,14 +8,14 @@
     <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
     <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
 	<script src="../../javascripts/statistics.js"></script>
-    <title>service_degradation</title>
+    <title>服务降级方案初步设计</title>
   </head>
 
   <body>
 
     <header>
       <div class="container">
-        <h1>service_degradation</h1>
+        <h1>服务降级方案初步设计</h1>
         <h2>Raven&#39;s Blog</h2>
 
         <section id="downloads">
@@ -29,7 +29,7 @@
     <div class="container">
       <section id="main_content">
         <h3>
-<a id="service_degradation" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>service_degradation</h3>
+<a id="服务降级方案初步设计" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>服务降级方案初步设计</h3>
 		<h1>服务降级</h1>
 
 <p>在公司负责APP首页的后端服务，因为是首页，如果服务稍微出现一点问题就有领导来找我，近一周内已经找我3次了（虽然不全是因为我的服务有问题导致的，大部分情况下是我依赖的下游服务的问题）。为了首页接口的问题，感觉是时候加入一些服务监控和自动降级的功能了，现记录一下大概的方案设计。</p>
