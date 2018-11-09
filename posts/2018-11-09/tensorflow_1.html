@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/prism.css" media="screen">
+	<script src="../../javascripts/statistics.js"></script>
+    <title>tensorflow_1</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>tensorflow_1</h1>
+        <h2>Raven&#39;s Blog</h2>
+
+        <section id="downloads">
+		  <a href="http://aducode.github.io/" class="btn btn-star" target="_blank"><span class="icon"></span>Home Page</a>
+          <a href="https://github.com/aducode" class="btn btn-github" target="_blank"><span class="icon"></span>View on GitHub</a>
+		  <a href="mailto:aducode@126.com" class="btn btn-email"><span class="icon"></span>Send Email</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="tensorflow_1" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0issac%E7%9A%84%E5%8D%9A%E5%AE%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>tensorflow_1</h3>
+		<p>Tensorflow学习系列（一）</p>
+
+<blockquote>
+  <p>从源码入手学习tensorflow 第一篇主要总结一下环境的搭建</p>
+</blockquote>
+
+<p>基于docker来搭建tensorflow编译环境，这样如果开发环境变了，只要重新build一遍镜像就可以了，在这里简单记录一下dockerfile</p>
+
+<pre class="language-sh line-number">
+<code>
+from ubuntu:16.04
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    zip \
+    g++ \
+    zlib1g-dev \
+    unzip \
+    python \
+    git \
+    wget \
+    python-pip
+RUN pip install numpy \
+    enum34 \
+    keras_preprocessing \
+    mock
+RUN mkdir /workspace
+WORKDIR /workspace
+RUN wget https://github.com/bazelbuild/bazel/releases/download/0.18.1/bazel-0.18.1-installer-linux-x86_64.sh
+RUN /bin/bash bazel-0.18.1-installer-linux-x86_64.sh
+RUN echo "PATH='$PATH':$HOME/bin" >> ~/.bashrc
+RUN /bin/bash -c "source ~/.bashrc"
+RUN rm -f bazel-0.18.1-installer-linux-x86_64.sh
+RUN git clone https://github.com/tensorflow/tensorflow.git
+WORKDIR /workspace/tensorflow
+# ./configure 这里没有执行，为了简单，可以先将cuda等关掉
+RUN bazel build --config=opt //tensorflow/tools/pip_package:build_pip_package
+RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package  ./tensorflow_pkg
+# 最后生成的whl包名可能随python版本 / config的不同会有变化
+RUN pip install ./tensorflow-1.12.0rc0-cp27-cp27mu-linux_x86_64.whl
+</code>
+</pre>
+
+      </section>
+	  <section style="font-size:13px;color:gray;">
+	  <div style="float:left">联系作者:<a href="mailto:aducode@126">aducode@126.com</a></div>
+	  <div style="float:right">更多精彩文章请点击:<a href="http://aducode.github.io">http://aducode.github.io</a></div>
+	  </section>
+    </div>
+	<script src="../../javascripts/prism.js"></script>
+  </body>
+</html>
+
